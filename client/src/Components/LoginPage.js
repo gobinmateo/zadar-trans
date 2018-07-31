@@ -8,7 +8,6 @@ import IconButton from '@material-ui/core/IconButton';
 import Input from '@material-ui/core/Input';
 import InputAdornment from '@material-ui/core/InputAdornment';
 import InputLabel from '@material-ui/core/InputLabel';
-import FormHelperText from '@material-ui/core/FormHelperText';
 import FormControl from '@material-ui/core/FormControl';
 import Visibility from '@material-ui/icons/Visibility';
 import VisibilityOff from '@material-ui/icons/VisibilityOff';
@@ -24,11 +23,14 @@ const styles = theme => ({
 });
 
 class LoginPage extends Component {
-  state = {
-    username: 'lezndja',
-    password: '',
-    showPassword: false,
-  };
+  constructor(props) {
+    super(props);
+    this.state = {
+      username: 'lezndja',
+      password: '',
+      showPassword: false,
+    }
+  }
 
   handleChange = name => event => {
     this.setState({
@@ -36,12 +38,12 @@ class LoginPage extends Component {
     });
   };
 
-  handleMouseDownPassword = event => {
-    event.preventDefault();
+  handleMouseDownPassword = e => {
+    e.preventDefault();
   };
 
   handleClickShowPassword = () => {
-    this.setState(state => ({ showPassword: !state.showPassword }));
+    this.setState({ showPassword: !this.state.showPassword });
   };
 
   render() {
