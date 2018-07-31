@@ -2,6 +2,7 @@ import classNames from 'classnames';
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
+import axios from 'axios';
 
 import Button from '@material-ui/core/Button';
 import IconButton from '@material-ui/core/IconButton';
@@ -46,6 +47,18 @@ class LoginPage extends Component {
     this.setState({ showPassword: !this.state.showPassword });
   };
 
+  handleLogin = () => {
+    const connection = axios.create({
+      baseURL: 'http://localhost:8080',
+    });
+    connection.post('/', {
+      data: {
+        username: this.state.username,
+        password: this.state.password,
+      },
+    });
+  };
+
   render() {
     const { classes } = this.props;
 
@@ -75,7 +88,7 @@ class LoginPage extends Component {
             }
           />
         </FormControl>
-        <Button variant="contained" color="primary" className={classes.button}>
+        <Button variant="contained" color="primary" className={classes.button} onClick={this.handleLogin}>
           Login
         </Button>
       </div>
