@@ -47,16 +47,19 @@ class LoginPage extends Component {
     this.setState({ showPassword: !this.state.showPassword });
   };
 
-  handleLogin = () => {
+  handleLogin = async () => {
     const connection = axios.create({
       baseURL: 'http://localhost:8080',
     });
-    connection.post('/', {
+
+    let resp = await connection.post('/', {
       data: {
         username: this.state.username,
         password: this.state.password,
       },
     });
+
+    console.log(resp);
   };
 
   render() {
