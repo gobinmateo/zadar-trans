@@ -1,7 +1,6 @@
 import express from 'express';
 import cors from 'cors';
 import bodyParser from 'body-parser';
-import axios from 'axios';
 
 const app = express();
 
@@ -13,7 +12,6 @@ app.use(bodyParser.json());
 
 app.post('/', (req, res) => {
   console.log(req.body);
-  res.send('Hello lezndja');
 });
 
 app.listen(8080, () => {
