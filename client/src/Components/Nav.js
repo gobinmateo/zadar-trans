@@ -1,12 +1,10 @@
 import React from 'react';
 import { NavLink } from 'react-router-dom';
-import Home from './Home';
-import LoginPage from './LoginPage';
+import styled, { css } from 'react-emotion';
 
 import AppBar from '@material-ui/core/AppBar';
 import ToolBar from '@material-ui/core/Toolbar';
 import IconButton from '@material-ui/core/IconButton';
-import Typography from '@material-ui/core/Typography';
 import Button from '@material-ui/core/Button';
 import MenuIcon from '@material-ui/icons/Menu';
 
@@ -18,11 +16,20 @@ const Nav = () => {
           <IconButton color="inherit" aria-label="Menu">
             <MenuIcon />
           </IconButton>
-          <Typography variant="title" color="inherit">
+          <Button
+            color="inherit"
+            component={ NavLink }
+            to='/'
+          >
             Zd-trans
-          </Typography>
-          <Button color="inherit">Home</Button>
-          <Button color="inherit">Login</Button>
+          </Button>
+          <Button
+            color="inherit"
+            component={ NavLink }
+            to='/login'
+          >
+            Login
+          </Button>
         </ToolBar>
       </AppBar>
     </div>
@@ -30,4 +37,3 @@ const Nav = () => {
 };
 
 export default Nav;
-
