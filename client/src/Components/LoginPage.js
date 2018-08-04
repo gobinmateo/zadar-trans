@@ -1,51 +1,14 @@
-import classNames from 'classnames';
 import React, { Component } from 'react';
-import PropTypes from 'prop-types';
-import { withStyles } from '@material-ui/core/styles';
 import axios from 'axios';
-
-import Button from '@material-ui/core/Button';
-import IconButton from '@material-ui/core/IconButton';
-import Input from '@material-ui/core/Input';
-import InputAdornment from '@material-ui/core/InputAdornment';
-import InputLabel from '@material-ui/core/InputLabel';
-import FormControl from '@material-ui/core/FormControl';
-import Visibility from '@material-ui/icons/Visibility';
-import VisibilityOff from '@material-ui/icons/VisibilityOff';
-
-const styles = theme => ({
-  container: {
-    display: 'flex',
-    flexWrap: 'wrap',
-  },
-  formControl: {
-    margin: theme.spacing.unit,
-  },
-});
 
 class LoginPage extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      username: 'lezndja',
+      username: '',
       password: '',
-      showPassword: false,
     }
   }
-
-  handleChange = name => event => {
-    this.setState({
-      [name]: event.target.value,
-    });
-  };
-
-  handleMouseDownPassword = e => {
-    e.preventDefault();
-  };
-
-  handleClickShowPassword = () => {
-    this.setState({ showPassword: !this.state.showPassword });
-  };
 
   handleLogin = async () => {
     const connection = axios.create({
@@ -63,44 +26,38 @@ class LoginPage extends Component {
   };
 
   render() {
-    const { classes } = this.props;
-
     return (
-      <div className={classes.container}>
-        <FormControl className={classes.formControl}>
-          <InputLabel htmlFor="name-simple">Username</InputLabel>
-          <Input id="name-simple" value={this.state.username} onChange={this.handleChange('username')} />
-        </FormControl>
-        <FormControl className={classNames(classes.formControl, classes.margin, classes.textField)}>
-          <InputLabel htmlFor="adornment-password">Password</InputLabel>
-          <Input
-            id="adornment-password"
-            type={this.state.showPassword ? 'text' : 'password'}
-            value={this.state.password}
-            onChange={this.handleChange('password')}
-            endAdornment={
-              <InputAdornment position="end">
-                <IconButton
-                  aria-label="Toggle password visibility"
-                  onClick={this.handleClickShowPassword}
-                  onMouseDown={this.handleMouseDownPassword}
-                >
-                  {this.state.showPassword ? <VisibilityOff /> : <Visibility />}
-                </IconButton>
-              </InputAdornment>
-            }
-          />
-        </FormControl>
-        <Button variant="contained" color="primary" className={classes.button} onClick={this.handleLogin}>
-          Login
-        </Button>
+      <div className="container">
+        <div className="row">
+          <div className="col s2 m4 l3">
+          </div>
+          <div className="col s10 m8 l6 center">
+            <form action="">
+              <div className="input-field">
+                <i className="material-icons prefix">account_circle</i>
+                <input id="email" type="text" className="validate"/>
+                <label htmlFor="email">
+                  Email
+                </label>
+              </div>
+              <div className="input-field">
+                <i className="material-icons prefix">vpn_key</i>
+                <input id="password" type="password" className="validate"/>
+                <label htmlFor="password">
+                  Password
+                </label>
+              </div>
+              <div className="input-field right">
+                <button className="btn blue-grey darken-3">
+                  Submit
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
       </div>
-    );
+    )
   }
 }
 
-LoginPage.propTypes = {
-  classes: PropTypes.object.isRequired,
-};
-
-export default withStyles(styles)(LoginPage);
+export default LoginPage;
