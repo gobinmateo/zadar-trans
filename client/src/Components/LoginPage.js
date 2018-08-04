@@ -7,9 +7,14 @@ const StyledDiv = styled.div`
   margin-top: 50px;
 `;
 
+type State = {
+  email: String,
+  password: String
+};
+
 @inject('Store')
 @observer
-class LoginPage extends Component {
+class LoginPage extends Component<State> {
   constructor(props) {
     super(props);
     this.state = {

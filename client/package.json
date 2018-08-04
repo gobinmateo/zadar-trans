@@ -7,6 +7,7 @@
     "babel-plugin-emotion": "^9.2.6",
     "babel-plugin-styled-components": "^1.5.1",
     "emotion": "^9.2.6",
+    "flow-bin": "^0.78.0",
     "formik": "^1.0.2",
     "material-icons": "^0.2.3",
     "materialize-css": "^1.0.0-rc.2",
