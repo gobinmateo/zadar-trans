@@ -93,4 +93,4 @@ class LoginPage extends Component {
   }
 }
 
-export default Login;
+export default LoginPage;
