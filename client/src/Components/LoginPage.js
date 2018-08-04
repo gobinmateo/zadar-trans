@@ -1,106 +1,96 @@
-import classNames from 'classnames';
 import React, { Component } from 'react';
-import PropTypes from 'prop-types';
-import { withStyles } from '@material-ui/core/styles';
 import axios from 'axios';
+import styled from 'styled-components';
 
-import Button from '@material-ui/core/Button';
-import IconButton from '@material-ui/core/IconButton';
-import Input from '@material-ui/core/Input';
-import InputAdornment from '@material-ui/core/InputAdornment';
-import InputLabel from '@material-ui/core/InputLabel';
-import FormControl from '@material-ui/core/FormControl';
-import Visibility from '@material-ui/icons/Visibility';
-import VisibilityOff from '@material-ui/icons/VisibilityOff';
-
-const styles = theme => ({
-  container: {
-    display: 'flex',
-    flexWrap: 'wrap',
-  },
-  formControl: {
-    margin: theme.spacing.unit,
-  },
-});
+const StyledDiv = styled.div`
+  margin-top: 50px;
+`;
 
 class LoginPage extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      username: 'lezndja',
+      email: '',
       password: '',
-      showPassword: false,
     }
   }
 
-  handleChange = name => event => {
-    this.setState({
-      [name]: event.target.value,
-    });
+  handleEmailChange = (e) => {
+    this.setState({ email: e.target.value })
   };
 
-  handleMouseDownPassword = e => {
+  handlePasswordChange = (e) => {
+    this.setState({ password: e.target.value })
+  };
+
+  handleLogin = async (e) => {
     e.preventDefault();
-  };
+    const { email, password} = this.state;
 
-  handleClickShowPassword = () => {
-    this.setState({ showPassword: !this.state.showPassword });
-  };
-
-  handleLogin = async () => {
     const connection = axios.create({
       baseURL: 'http://localhost:8080',
     });
 
-    let resp = await connection.post('/', {
+    await connection.post('/', {
       data: {
-        username: this.state.username,
-        password: this.state.password,
+        email: email,
+        password: password,
       },
     });
-
-    console.log(resp);
   };
 
   render() {
-    const { classes } = this.props;
-
     return (
-      <div className={classes.container}>
-        <FormControl className={classes.formControl}>
-          <InputLabel htmlFor="name-simple">Username</InputLabel>
-          <Input id="name-simple" value={this.state.username} onChange={this.handleChange('username')} />
-        </FormControl>
-        <FormControl className={classNames(classes.formControl, classes.margin, classes.textField)}>
-          <InputLabel htmlFor="adornment-password">Password</InputLabel>
-          <Input
-            id="adornment-password"
-            type={this.state.showPassword ? 'text' : 'password'}
-            value={this.state.password}
-            onChange={this.handleChange('password')}
-            endAdornment={
-              <InputAdornment position="end">
-                <IconButton
-                  aria-label="Toggle password visibility"
-                  onClick={this.handleClickShowPassword}
-                  onMouseDown={this.handleMouseDownPassword}
-                >
-                  {this.state.showPassword ? <VisibilityOff /> : <Visibility />}
-                </IconButton>
-              </InputAdornment>
-            }
-          />
-        </FormControl>
-        <Button variant="contained" color="primary" className={classes.button} onClick={this.handleLogin}>
-          Login
-        </Button>
+      <div className="container">
+        <div className="row">
+          <div className="col s2 m4 l3">
+          </div>
+          <StyledDiv className="col s10 m8 l6 center">
+            <form action="">
+              <div className="input-field">
+                <i className="material-icons prefix">
+                  account_circle
+                </i>
+                <input id="email"
+                       type="email"
+                       className="validate"
+                       onChange={this.handleEmailChange}
+                       required/>
+                <label htmlFor="email">
+                  Email
+                </label>
+                <span className="helper-text"
+                      data-error="Invalid email"/>
+              </div>
+
+              <div className="input-field">
+                <i className="material-icons prefix">
+                  vpn_key
+                </i>
+                <input id="password"
+                       type="password"
+                       className="validate"
+                       onChange={this.handlePasswordChange}
+                       required/>
+                <label htmlFor="password">
+                  Password
+                </label>
+                <span className="helper-text"
+                      data-error="Invalid password"/>
+              </div>
+
+              <div className="input-field right">
+                <button className="btn blue-grey darken-3"
+                        onClick={this.handleLogin}>
+                  Login
+                </button>
+              </div>
+            </form>
+          </StyledDiv>
+        </div>
       </div>
-    );
+    )
   }
 }
 
-LoginPage.propTypes = {
-  classes: PropTypes.object.isRequired,
-};
-
-export default withStyles(styles)(LoginPage);
+export default LoginPage;

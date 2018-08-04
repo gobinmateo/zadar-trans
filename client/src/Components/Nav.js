@@ -1,33 +1,39 @@
-import React from 'react';
-import { NavLink } from 'react-router-dom';
-import Home from './Home';
-import LoginPage from './LoginPage';
+import React, { Component } from 'react';
+import { NavLink, withRouter } from 'react-router-dom';
 
-import AppBar from '@material-ui/core/AppBar';
-import ToolBar from '@material-ui/core/Toolbar';
-import IconButton from '@material-ui/core/IconButton';
-import Typography from '@material-ui/core/Typography';
-import Button from '@material-ui/core/Button';
-import MenuIcon from '@material-ui/icons/Menu';
+class Nav extends Component {
 
-const Nav = () => {
-  return (
-    <div>
-      <AppBar position="static">
-        <ToolBar>
-          <IconButton color="inherit" aria-label="Menu">
-            <MenuIcon />
-          </IconButton>
-          <Typography variant="title" color="inherit">
-            Zd-trans
-          </Typography>
-          <Button color="inherit">Home</Button>
-          <Button color="inherit">Login</Button>
-        </ToolBar>
-      </AppBar>
-    </div>
-  );
+  handleNewIntervention = () => {
+    const { history } = this.props;
+    history.push('/intervention');
+  };
+
+  handleLogoClick = () => {
+    const { history } = this.props;
+    history.push('/');
+  };
+
+  render() {
+    return (
+      <nav className="nav-bar blue-grey darken-1">
+        <div className="container">
+          <a onClick={this.handleLogoClick} className="brand-logo center">
+            <i className="material-icons">drive_eta</i>
+            ZADAR TRANS
+          </a>
+          <ul className="left">
+            <li><NavLink to='/'> HOME </NavLink></li>
+            <li><NavLink to='/login'> LOGIN </NavLink></li>
+          </ul>
+          <button
+            className="btn-floating pulse btn-large waves-effect waves-light blue-grey darken-3 right"
+            onClick={this.handleNewIntervention}>
+            <i className="material-icons">add</i>
+          </button>
+        </div>
+      </nav>
+    );
+  }
 };
 
-export default Nav;
-
+export default withRouter(Nav);
