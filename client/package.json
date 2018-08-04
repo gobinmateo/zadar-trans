@@ -5,11 +5,16 @@
   "dependencies": {
     "axios": "^0.18.0",
     "babel-plugin-emotion": "^9.2.6",
+    "babel-plugin-styled-components": "^1.5.1",
     "emotion": "^9.2.6",
     "formik": "^1.0.2",
     "material-icons": "^0.2.3",
     "materialize-css": "^1.0.0-rc.2",
+    "mobx": "^5.0.3",
+    "mobx-react": "^5.2.3",
     "react": "^16.4.1",
+    "react-app-rewire-mobx": "^1.0.8",
+    "react-app-rewired": "^1.5.2",
     "react-dom": "^16.4.1",
     "react-emotion": "^9.2.6",
     "react-router-dom": "^4.3.1",
@@ -17,9 +22,9 @@
     "styled-components": "^3.4.0"
   },
   "scripts": {
-    "start": "PORT=8000 react-scripts start",
-    "build": "react-scripts build",
-    "test": "react-scripts test --env=jsdom",
-    "eject": "react-scripts eject"
+    "start": "PORT=8000 react-app-rewired start",
+    "build": "react-app-rewired build",
+    "test": "react-app-rewired test --env=jsdom",
+    "eject": "react-app-rewired eject"
   }
 }

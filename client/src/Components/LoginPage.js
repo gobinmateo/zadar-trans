@@ -1,11 +1,14 @@
 import React, { Component } from 'react';
 import axios from 'axios';
 import styled from 'styled-components';
+import { inject, observer } from 'mobx-react';
 
 const StyledDiv = styled.div`
   margin-top: 50px;
 `;
 
+@inject('Store')
+@observer
 class LoginPage extends Component {
   constructor(props) {
     super(props);
