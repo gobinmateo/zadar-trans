@@ -6,15 +6,16 @@ import express from 'express';
 import mongoose from 'mongoose';
 
 import interventionRoutes from './routes/interventions';
+import loginRoutes from './routes/login';
+import userRoutes from './routes/users';
 
 // load environment variables
-dotenv.config();
+const config = dotenv.config();
 
 const app = express();
 
 // connect to mongodb
-mongoose.connect(process.env.MONGODB_URI);
-mongoose.Promise = global.Promise;
+mongoose.connect(process.env.MONGODB_URI, {useNewUrlParser: true});
 
 // allows cross-origin HTTP requests => https://developer.mozilla.org/en-US/docs/Web/HTTP/CORS
 app.use(cors());
@@ -23,6 +24,8 @@ app.use(cors());
 app.use(bodyParser.json());
 
 app.use('/interventions', interventionRoutes);
+app.use('/login', loginRoutes);
+app.use('/users', userRoutes);
 
 app.listen(8080, () => {
   console.log('App is now listening on port 8080');
