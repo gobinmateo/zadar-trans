@@ -1,12 +1,20 @@
 import React, { Component } from 'react';
 import axios from 'axios';
 import styled from 'styled-components';
+import { inject, observer } from 'mobx-react';
 
 const StyledDiv = styled.div`
   margin-top: 50px;
 `;
 
-class LoginPage extends Component {
+type State = {
+  email: String,
+  password: String
+};
+
+@inject('Store')
+@observer
+class LoginPage extends Component<State> {
   constructor(props) {
     super(props);
     this.state = {
