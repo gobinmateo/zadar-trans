@@ -13,7 +13,6 @@ router.delete('/', async (req, res, next) => {
 });
 
 router.delete('/:email', async (req, res, next) => {
-  console.log(' U SINGLE DELETU');
   const email = req.params.email;
 
   if(email === undefined) res.send({ error: 'Email has to be provided!' });
