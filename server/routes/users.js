@@ -60,9 +60,8 @@ router.put('/', async (req, res, next) => {
     const hash = crypto.createHash('sha256');
 
     hash.update(password);
-    const hashedpw = hash.digest('hex');
 
-    user.passwordHash = hashedpw;
+    user.passwordHash = hash.digest('hex');
 
     await user.save();
 
@@ -90,12 +89,11 @@ router.post('/', async (req, res, next) => {
     const hash = crypto.createHash('sha256');
 
     hash.update(password);
-    const hashedpw = hash.digest('hex');
 
     const newUser = new User();
 
     newUser.email = email;
-    newUser.passwordHash = hashedpw;
+    newUser.passwordHash = hash.digest('hex');
     newUser.role = role;
 
     await newUser.save();
