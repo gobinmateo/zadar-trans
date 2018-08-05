@@ -29,17 +29,18 @@ class LoginPage extends Component {
     const { email, password} = this.state;
 
     const connection = axios.create({
+      withCredentials: true,
       baseURL: 'http://localhost:8080',
     });
 
     const response = await connection.post('/login', {
       data: {
         email: email,
-        password: password,
+        password: password
       },
     });
 
-    console.log('DOBIVEN STATUS OD BACKENDA', response.status);
+    if(response.data.token) document.cookie = `token=${ response.data.token }`;
   };
 
   render() {
