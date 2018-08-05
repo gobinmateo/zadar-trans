@@ -20,15 +20,16 @@ class LoginPage extends Component<State> {
     this.state = {
       email: '',
       password: '',
+      status: 200
     }
   }
 
   handleEmailChange = (e) => {
-    this.setState({ email: e.target.value })
+    this.setState({ email: e.target.value });
   };
 
   handlePasswordChange = (e) => {
-    this.setState({ password: e.target.value })
+    this.setState({ password: e.target.value });
   };
 
   handleLogin = async (e) => {
@@ -39,12 +40,14 @@ class LoginPage extends Component<State> {
       baseURL: 'http://localhost:8080',
     });
 
-    await connection.post('/', {
+    const response = await connection.post('/login', {
       data: {
         email: email,
         password: password,
       },
     });
+
+    console.log('DOBIVEN STATUS OD BACKENDA', response.status);
   };
 
   render() {
@@ -97,7 +100,7 @@ class LoginPage extends Component<State> {
           </StyledDiv>
         </div>
       </div>
-    )
+    );
   }
 }
 
