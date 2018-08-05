@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import {Route, Switch} from 'react-router-dom';
 
 import Home from './Components/Home';
-import LoginPage from "./Components/LoginPage";
+import LoginPage from './Components/LoginPage';
 import Nav from './Components/Nav';
 import Intervention from './Components/Intervention/Intervention';
 

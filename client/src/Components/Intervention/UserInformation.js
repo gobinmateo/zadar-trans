@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
 import { withRouter } from 'react-router-dom';
+import { socket } from '../../index';
 
 import Store from '../../stores/Store';
 
@@ -45,6 +46,10 @@ class UserInformation extends Component<State> {
     const { Store } = this.props;
     const { history } = this.props;
     Store.addIntervention(this.state);
+    socket.emit('SEND_INTERVENTION', {
+      name: Store.intervention.name, surname: Store.intervention.surname
+    });
+    setTimeout(3000);
     history.push('/');
   };
 
