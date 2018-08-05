@@ -1,30 +1,32 @@
 import mongoose from 'mongoose';
 
 const intervention = new mongoose.Schema({
-  brMobStranke: String,
-  brOsobaUVozilu: Number,
-  brPoliceOsiguranja: String,
-  brSasije: String,
-  brSlucaja: Number,
-  datumPrveRegistracije: Date,
-  imeIPrezimeStranke: String,
-  lokacijaIstovara: String,
-  lokacijaNesrece: String,
-  markaIModelVozila: String,
+  accidentArrivalDate: Date,
+  accidentLocation: String,
+  additionalVechileInfo: String,
+  chassisNumber: String,
+  checkoutRemark: String,
   company: {
     type: mongoose.SchemaTypes.ObjectId, ref: 'Company'
   },
-  nacinPlacanja: String,
-  napomenaOOdjavi: String,
-  odjava: String,
-  opisStatusaVozila: String,
-  partnerID: Number,
-  registracija: String,
-  statusIntervencije: String,
-  statusVozila: String,
-  vrijemeDolaskaNaLokacijuNesrece: Date,
-  vrijemeZaprimanjaIntervencije: Date,
-  vrijemeZavrsetkaUsluge: Date
+  dischargeLocation: String,
+  firstRegistrationDate: Date,
+  id: Number,
+  insurancePolicyNumber: String,
+  interventionCompletionDate: Date
+  interventionRecievalDate: Date,
+  interventionStatus: String,
+  partner: {
+    type: mongoose.SchemaTypes.ObjectId, ref: 'Partner'
+  },
+  paymentMethod: String,
+  peopleCount: Number,
+  phoneNumber: String,
+  registrationPlate: String,
+  remark: String,
+  vehicleModel: String,
+  vehicleStatus: String,
+  victimName: String,
 });
 
 const Intervention = mongoose.model('Intervention', intervention);

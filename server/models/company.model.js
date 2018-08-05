@@ -1,12 +1,12 @@
 import mongoose from 'mongoose';
 
 const company = new mongoose.Schema({
-  imeModela: String,
-  sifra: Number,
-  korisnici: [{
+  contractExpiryDate: Date,
+  id: Number,
+  name: String,
+  users: [{
     type: mongoose.SchemaTypes.ObjectId, ref: 'User'
   }],
-  zavrsetakTrajanjaUgovora: Date,
 });
 
 const Company = mongoose.model('Company', company);
