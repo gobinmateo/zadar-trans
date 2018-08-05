@@ -7,7 +7,7 @@ const user = new mongoose.Schema({
   role: {
     type: String,
     enum : [Role.OPERATOR.name, Role.ADMIN.name, Role.MODEL.name],
-    default: Role.OPERATOR
+    default: Role.OPERATOR.name
   },
 });
 
