@@ -1,8 +1,8 @@
 import mongoose from 'mongoose';
 
 const partner = new mongoose.Schema({
-  imePartnera: String,
-  sifra: Number
+  id: Number
+  name: String,
 });
 
 const Partner = mongoose.model('Partner', partner);
