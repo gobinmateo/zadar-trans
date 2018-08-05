@@ -1,11 +1,15 @@
 import { action, observable } from 'mobx';
+import { InterventionStorage } from './InterventionStorage';
 
 class Store {
-  @observable theme = 'day';
+  @observable intervention = new InterventionStorage();
+
   @action
-  toggleTheme = () => {
-    this.theme = this.theme == 'day' ? 'night' : 'day';
-  };
+  addIntervention(info) {
+    for (const prop in info) {
+      this.intervention[prop] = info[prop];
+    }
+  }
 }
 
 export default new Store();
