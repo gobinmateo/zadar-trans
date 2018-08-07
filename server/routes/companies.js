@@ -61,14 +61,15 @@ router.post('/', async (req, res, next) => {
 
     updateAttributesFromParams(req.body, newCompany);
 
-    for(const email of req.body.users) {
-      const user = await User.findOne({ email });
+    if(req.body.users) {
+      for(const email of req.body.users) {
+        const user = await User.findOne({ email });
 
-      if(user) newCompany.users.push(user._id);
+        if(user) newCompany.users.push(user._id);
+      }
     }
 
     await newCompany.save((err => {
-      console.log(err)
       if(err) res.status(400).send(err.errors.id.message);
       else res.sendStatus(201);
     }));
