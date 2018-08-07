@@ -6,6 +6,7 @@ import dotenv from 'dotenv';
 import express from 'express';
 import mongoose from 'mongoose';
 
+import companyRoutes from './routes/companies';
 import interventionRoutes from './routes/interventions';
 import loginRoutes from './routes/login';
 import userRoutes from './routes/users';
@@ -26,6 +27,7 @@ app.use(bodyParser.json());
 
 app.use(cookieParser());
 
+app.use('/companies', companyRoutes);
 app.use('/interventions', interventionRoutes);
 app.use('/login', loginRoutes);
 app.use('/users', userRoutes);
