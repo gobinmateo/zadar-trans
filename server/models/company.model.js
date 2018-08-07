@@ -2,8 +2,15 @@ import mongoose from 'mongoose';
 
 const company = new mongoose.Schema({
   contractExpiryDate: Date,
-  id: Number,
-  name: String,
+  id: {
+    type: Number,
+    unique: true,
+    required: [ true, 'Company id must be provided.' ],
+  },
+  name: {
+    type: String,
+    required: [ true, 'Company name must be provided.'],
+  },
   users: [{
     type: mongoose.SchemaTypes.ObjectId, ref: 'User'
   }],
