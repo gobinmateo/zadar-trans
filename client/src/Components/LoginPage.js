@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import axios from 'axios';
 import styled from 'styled-components';
 import { inject, observer } from 'mobx-react';
+import { withRouter } from 'react-router-dom';
 
 const StyledDiv = styled.div`
   margin-top: 50px;
@@ -33,6 +34,7 @@ class LoginPage extends Component<State> {
   };
 
   handleLogin = async (e) => {
+    const { history } = this.props;
     e.preventDefault();
     const { email, password} = this.state;
 
@@ -48,7 +50,11 @@ class LoginPage extends Component<State> {
       },
     });
 
+    this.props.Store.login(true);
+
     if(response.data.token) document.cookie = `token=${ response.data.token }`;
+
+    history.push('/');
   };
 
   render() {
@@ -105,4 +111,4 @@ class LoginPage extends Component<State> {
   }
 }
 
-export default LoginPage;
+export default withRouter(LoginPage);

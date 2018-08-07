@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import InterventionList from '../Components/Intervention/InterventionList';
+import InterventionList from './InterventionList';
 
 export default class Home extends Component {
   render() {

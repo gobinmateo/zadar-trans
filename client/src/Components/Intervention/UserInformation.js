@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
 import { withRouter } from 'react-router-dom';
 import { socket } from '../../index';
+import API from '../../Api';
 
 import Store from '../../stores/Store';
 
@@ -11,6 +12,8 @@ type State = {
   phoneNumber: String,
   insurancePolicyNumber: String
 }
+
+let id = 185;
 
 @inject('Store')
 @observer
@@ -42,14 +45,25 @@ class UserInformation extends Component<State> {
     this.setState({ insurancePolicyNumber: e.target.value })
   };
 
-  handleFinishClick = () => {
-    const { Store } = this.props;
-    const { history } = this.props;
+  handleFinishClick = async () => {
+    const { Store, history } = this.props;
+    const { name, surname, phoneNumber, insurancePolicyNumber } = this.state;
+    const victimName = `${name} ${surname}`;
+    const newIntervention = true;
+
+    // add intervention to database
+    await API.post('/interventions', { id, victimName, phoneNumber, insurancePolicyNumber });
+    // add intervention to global store
     Store.addIntervention(this.state);
-    socket.emit('SEND_INTERVENTION', {
-      name: Store.intervention.name, surname: Store.intervention.surname
+    // send notification to other users
+    socket.emit('INTERVENTION_NOTIFICATION', {
+      newIntervention
     });
-    setTimeout(3000);
+    socket.emit('SEND_INTERVENTION', {
+      id
+    });
+    id += 1;
+    // switch to front page
     history.push('/');
   };
 
