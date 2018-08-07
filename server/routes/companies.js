@@ -60,7 +60,6 @@ router.post('/', async (req, res, next) => {
     const newCompany = new Company();
 
     updateAttributesFromParams(req.body, newCompany);
-    newCompany.users = [];
 
     for(const email of req.body.users) {
       const user = await User.findOne({ email });
@@ -69,6 +68,7 @@ router.post('/', async (req, res, next) => {
     }
 
     await newCompany.save((err => {
+      console.log(err)
       if(err) res.status(400).send(err.errors.id.message);
       else res.sendStatus(201);
     }));
