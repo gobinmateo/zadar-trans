@@ -11,9 +11,13 @@ const intervention = new mongoose.Schema({
   },
   dischargeLocation: String,
   firstRegistrationDate: Date,
-  id: Number,
+  id: {
+    type: Number,
+    unique: true,
+    required: [ true, 'Company id must be provided.' ],
+  },
   insurancePolicyNumber: String,
-  interventionCompletionDate: Date
+  interventionCompletionDate: Date,
   interventionRecievalDate: Date,
   interventionStatus: String,
   partner: {

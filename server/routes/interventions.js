@@ -1,4 +1,5 @@
 import express from 'express';
+import updateAttributesFromParams from '../utils/paramsParser';
 
 import Intervention from '../models/intervention.model';
 
@@ -40,7 +41,7 @@ router.get('/:id', async (req, res, next) => {
   }
 });
 
-router.put('/', async (req, res, next) => {
+router.put('/:id', async (req, res, next) => {
   const {
     accidentArrivalDate,
     accidentLocation,
@@ -52,7 +53,7 @@ router.put('/', async (req, res, next) => {
     firstRegistrationDate,
     id,
     insurancePolicyNumber,
-    interventionCompletionDate
+    interventionCompletionDate,
     interventionRecievalDate,
     interventionStatus,
     partnerID,
@@ -92,7 +93,7 @@ router.put('/', async (req, res, next) => {
     intervention.partnerID = partnerID;
     intervention.paymentMethod = paymentMethod;
     intervention.peopleCount = peopleCount;
-    intervention.phoneNumber phoneNumber;
+    intervention.phoneNumber = phoneNumber;
     intervention.registrationPlate = registrationPlate;
     intervention.remark = remark;
     intervention.vehicleModel = vehicleModel;
@@ -106,66 +107,18 @@ router.put('/', async (req, res, next) => {
 });
 
 router.post('/', async (req, res, next) => {
-  const {
-    accidentArrivalDate,
-    accidentLocation,
-    additionalVechileInfo,
-    chassisNumber,
-    checkoutRemark,
-    companyID,
-    dischargeLocation,
-    firstRegistrationDate,
-    id,
-    insurancePolicyNumber,
-    interventionCompletionDate
-    interventionRecievalDate,
-    interventionStatus,
-    partnerID,
-    paymentMethod,
-    peopleCount,
-    phoneNumber,
-    registrationPlate,
-    remark,
-    vehicleModel,
-    vehicleStatus,
-    victimName,
-  } = req.body;
-
-  // both parameters have to be present
-  if(id === undefined) {
-    res.status(400).send({ error: 'Intervention id has to be provided!' });
-  }
+  // if(id === undefined) {
+  //   res.status(400).send({ error: 'Intervention id has to be provided!' });
+  // }
 
   const intervention = await Intervention.findOne({ id });
 
-  // user already exists
   if(intervention) {
     res.status(403).send({ error: 'Intervention with provided email already exists!' });
   } else {
     const newIntervention = new Intervention();
 
-    newIntervention.accidentArrivalDate = accidentArrivalDate;
-    newIntervention.accidentLocation = accidentLocation;
-    newIntervention.additionalVechileInfo = additionalVechileInfo;
-    newIntervention.chassisNumber = chassisNumber;
-    newIntervention.checkoutRemark = checkoutRemark;
-    newIntervention.companyID = companyID;
-    newIntervention.dischargeLocation = dischargeLocation;
-    newIntervention.firstRegistrationDate = firstRegistrationDate;
-    newIntervention.id = id;
-    newIntervention.insurancePolicyNumber = insurancePolicyNumber;
-    newIntervention.interventionCompletionDate = interventionCompletionDate;
-    newIntervention.interventionRecievalDate = interventionRecievalDate;
-    newIntervention.interventionStatus = interventionStatus;
-    newIntervention.partnerID = partnerID;
-    newIntervention.paymentMethod = paymentMethod;
-    newIntervention.peopleCount = peopleCount;
-    newIntervention.phoneNumber phoneNumber;
-    newIntervention.registrationPlate = registrationPlate;
-    newIntervention.remark = remark;
-    newIntervention.vehicleModel = vehicleModel;
-    newIntervention.vehicleStatus = vehicleStatus;
-    newIntervention.victimName = victimName;
+    updateAttributesFromParams(req.body, newIntervention);
 
     await newIntervention.save();
 
