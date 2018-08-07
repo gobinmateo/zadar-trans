@@ -1,0 +1,62 @@
+[
+  {
+    "group": "ADMIN",
+    "permissions": [
+      {
+        "resource": "*",
+        "methods": "*"
+      }
+    ],
+    "action": "allow"
+  },
+  {
+    "group": "MODEL",
+    "permissions": [
+      {
+        "resource": "companies/",
+        "methods": "GET",
+        "action": "allow"
+      },
+      {
+        "resource": "interventions/",
+        "methods": "*",
+        "action": "allow"
+      },
+      {
+        "resource": "partners/",
+        "methods": "GET",
+        "action": "allow"
+      },
+      {
+        "resource": "users/",
+        "methods": "*",
+        "action": "deny"
+      }
+    ]
+  },
+  {
+    "group": "OPERATOR",
+    "permissions": [
+      {
+        "resource": "companies/",
+        "methods": "GET",
+        "action": "allow"
+      },
+      {
+        "resource": "interventions/",
+        "methods": "*",
+        "action": "allow"
+      },
+      {
+        "resource": "partners/",
+        "methods": "GET",
+        "action": "allow"
+      },
+      {
+        "resource": "users/",
+        "methods": "*",
+        "action": "deny"
+      }
+    ]
+  }
+]
