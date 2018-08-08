@@ -5,11 +5,11 @@ const company = new mongoose.Schema({
   id: {
     type: Number,
     unique: true,
-    required: [ true, 'Company id must be provided.' ],
+    required: true,
   },
   name: {
     type: String,
-    required: [ true, 'Company name must be provided.'],
+    required: true,
   },
   users: [{
     type: mongoose.SchemaTypes.ObjectId, ref: 'User'

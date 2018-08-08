@@ -14,7 +14,7 @@ const intervention = new mongoose.Schema({
   id: {
     type: Number,
     unique: true,
-    required: [ true, 'Company id must be provided.' ],
+    required: true,
   },
   insurancePolicyNumber: String,
   interventionCompletionDate: Date,
