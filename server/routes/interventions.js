@@ -22,7 +22,6 @@ router.delete('/:id', async (req, res, next) => {
 
 router.get('/', async (req, res, next) => {
   const interventions = await Intervention.find();
-
   res.json(interventions);
 });
 
@@ -52,7 +51,7 @@ router.put('/', async (req, res, next) => {
     firstRegistrationDate,
     id,
     insurancePolicyNumber,
-    interventionCompletionDate
+    interventionCompletionDate,
     interventionRecievalDate,
     interventionStatus,
     partnerID,
@@ -92,7 +91,7 @@ router.put('/', async (req, res, next) => {
     intervention.partnerID = partnerID;
     intervention.paymentMethod = paymentMethod;
     intervention.peopleCount = peopleCount;
-    intervention.phoneNumber phoneNumber;
+    intervention.phoneNumber = phoneNumber;
     intervention.registrationPlate = registrationPlate;
     intervention.remark = remark;
     intervention.vehicleModel = vehicleModel;
@@ -117,7 +116,7 @@ router.post('/', async (req, res, next) => {
     firstRegistrationDate,
     id,
     insurancePolicyNumber,
-    interventionCompletionDate
+    interventionCompletionDate,
     interventionRecievalDate,
     interventionStatus,
     partnerID,
@@ -133,14 +132,15 @@ router.post('/', async (req, res, next) => {
 
   // both parameters have to be present
   if(id === undefined) {
-    res.status(400).send({ error: 'Intervention id has to be provided!' });
+    console.log('ID UNDEFINED');
+    return res.status(400).send({ error: 'Intervention id has to be provided!' });
   }
 
   const intervention = await Intervention.findOne({ id });
 
-  // user already exists
   if(intervention) {
-    res.status(403).send({ error: 'Intervention with provided email already exists!' });
+    console.log('ID ALREADY IN USE');
+    res.status(403).send({ error: 'Intervention with provided id already exists!' });
   } else {
     const newIntervention = new Intervention();
 
@@ -160,15 +160,15 @@ router.post('/', async (req, res, next) => {
     newIntervention.partnerID = partnerID;
     newIntervention.paymentMethod = paymentMethod;
     newIntervention.peopleCount = peopleCount;
-    newIntervention.phoneNumber phoneNumber;
+    newIntervention.phoneNumber = phoneNumber;
     newIntervention.registrationPlate = registrationPlate;
     newIntervention.remark = remark;
     newIntervention.vehicleModel = vehicleModel;
     newIntervention.vehicleStatus = vehicleStatus;
     newIntervention.victimName = victimName;
 
+    console.log('NEW INTERVENTION ', newIntervention);
     await newIntervention.save();
-
     res.status(200).send({ message: 'Intervention successfully added to database.' });
   }
 });

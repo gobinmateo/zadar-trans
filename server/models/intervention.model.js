@@ -13,7 +13,7 @@ const intervention = new mongoose.Schema({
   firstRegistrationDate: Date,
   id: Number,
   insurancePolicyNumber: String,
-  interventionCompletionDate: Date
+  interventionCompletionDate: Date,
   interventionRecievalDate: Date,
   interventionStatus: String,
   partner: {
