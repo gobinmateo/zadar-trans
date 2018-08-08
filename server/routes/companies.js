@@ -15,7 +15,6 @@ router.delete('/', async (req, res, next) => {
 router.delete('/:id', async (req, res, next) => {
   const resp = await Company.deleteOne({ id: req.params.id });
 
-  // if resource does not exist, return 404, else 204
   resp.n === 0 ? res.sendStatus(404) : res.sendStatus(204);
 });
 
@@ -45,9 +44,18 @@ router.put('/:id', async (req, res, next) => {
   } else {
     updateAttributesFromParams(req.body, company);
 
-    await company.save();
+    if(req.body.users) {
+      for(const email of req.body.users) {
+        const user = await User.findOne({ email });
 
-    res.sendStatus(200);
+        if(user) newCompany.users.push(user._id);
+      }
+    }
+
+    await company.save((err => {
+      if(err.name = 'ValidationError') res.status(400);
+      else res.sendStatus(201);
+    }));
   }
 });
 

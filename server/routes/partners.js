@@ -1,4 +1,6 @@
 import express from 'express';
+import updateAttributesFromParams from '../utils/paramsParser';
+
 
 import Partner from '../models/partner.model';
 
@@ -7,83 +9,58 @@ const router = express.Router();
 router.delete('/', async (req, res, next) => {
   await Partner.deleteMany();
 
-  res.sendStatus(200);
+  res.sendStatus(204);
 });
 
 router.delete('/:id', async (req, res, next) => {
-  const id = req.params.id;
+  await Partner.deleteOne({ id: req.params.id});
 
-  if(id === undefined) res.send({ error: 'Email has to be provided!' });
-
-  await Partner.deleteOne({id: id});
-
-  res.sendStatus(200);
+  res.sendStatus(204);
 });
 
 router.get('/', async (req, res, next) => {
-  const users = await Partner.find();
+  const partners = await Partner.find();
 
-  res.json(users);
+  res.json(partners);
 });
 
 router.get('/:id', async (req, res, next) => {
-  const id = req.params.id;
-
-  if(id === undefined) res.send({ error: 'Email has to be provided!' });
-
-  const partner = await Partner.findOne({id: id});
+  const partner = await Partner.findOne({ id: req.params.id });
 
   if(!partner) {
-    res.status(403).send({ error: 'Partner with provided id does not exist!' });
+    res.sendStatus(404);
   } else {
     res.json(partner);
   }
 });
 
-router.put('/', async (req, res, next) => {
-  const { id, name } = req.body;
+router.put('/:id', async (req, res, next) => {
+  const partner = await Partner.findOne({ id: req.params.id });
 
-  // both parameters have to be present
-  if(id === undefined || name === undefined) {
-    res.status(400).send({ error: 'Id and name have to be provided!' });
-  }
-
-  const partner = await Partner.findOne({ id });
-
-  // partner doesn't exist
   if(!partner) {
-    res.status(403).send({ error: 'Partner with provided id does not exist!' });
+    res.sendStatus(404);
   } else {
-    partner.name = name;
+    updateAttributesFromParams(req.body, partner);
 
     await partner.save();
 
-    res.status(200).send({ message: 'Partner successfully updated.' });
+    res.sendStatus(200);
   }
 });
 
 router.post('/', async (req, res, next) => {
-  const { id, name } = req.body;
+  const partner = await Partner.findOne({ id: req.body.id });
 
-  // both parameters have to be present
-  if(id === undefined || name === undefined) {
-    res.status(400).send({ error: 'Id and name have to be provided!' });
-  }
-
-  const partner = await Partner.findOne({ id });
-
-  // partner already exists
   if(partner) {
-    res.status(403).send({ error: 'Partner with provided id already exists!' });
+    res.sendStatus(404);
   } else {
     const newPartner = new Partner();
 
-    newPartner.id = id;
-    newPartner.name = name;
+    updateAttributesFromParams(req.body, newPartner);
 
     await newPartner.save();
 
-    res.status(200).send({ message: 'Partner successfully added to database.' });
+    res.sendStatus(200);
   }
 });
 

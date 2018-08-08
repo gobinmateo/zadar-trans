@@ -1,5 +1,7 @@
 import crypto from 'crypto';
 import express from 'express';
+import updateAttributesFromParams from '../utils/paramsParser';
+
 
 import Role from '../utils/role';
 import User from '../models/user.model';
@@ -9,17 +11,13 @@ const router = express.Router();
 router.delete('/', async (req, res, next) => {
   await User.deleteMany();
 
-  res.sendStatus(200);
+  res.sendStatus(204);
 });
 
 router.delete('/:email', async (req, res, next) => {
-  const email = req.params.email;
+  await User.deleteOne({ email: req.body.email });
 
-  if(email === undefined) res.send({ error: 'Email has to be provided!' });
-
-  await User.deleteOne({email: email});
-
-  res.sendStatus(200);
+  res.sendStatus(204);
 });
 
 router.get('/', async (req, res, next) => {
@@ -29,61 +27,40 @@ router.get('/', async (req, res, next) => {
 });
 
 router.get('/:email', async (req, res, next) => {
-  const email = req.params.email;
-
-  if(email === undefined) res.send({ error: 'Email has to be provided!' });
-
-  const user = await User.findOne({email: email});
+  const user = await User.findOne({email: req.body.email});
 
   if(!user) {
-    res.status(403).send({ error: 'User with provided email does not exist!' });
+    res.sendStatus(404);
   } else {
     res.json(user);
   }
 });
 
-router.put('/', async (req, res, next) => {
-  const { email, password } = req.body;
+router.put('/:email', async (req, res, next) => {
+  const user = await User.findOne({ email: req.body.email });
 
-  // both parameters have to be present
-  if(password === undefined) {
-    res.status(400).send({ error: 'Password has to be provided!' });
-  }
-
-  const user = await User.findOne({ email });
-
-  // user doesn't exist
   if(!user) {
-    res.status(403).send({ error: 'User with provided email does not exist!' });
+    res.sendStatus(404);
   } else {
     const hash = crypto.createHash('sha256');
 
     hash.update(password);
 
+    updateAttributesFromParams(req.body, user);
+
     user.passwordHash = hash.digest('hex');
 
     await user.save();
 
-    res.status(200).send({ message: 'User successfully updated.' });
+    res.sendStatus(200);
   }
 });
 
 router.post('/', async (req, res, next) => {
-  const { email, password, role } = req.body;
-  const roleValue = Role.enumValueOf(role);
+  const user = await User.findOne({ email : req.body.email });
 
-  // both parameters have to be present
-  if(email === undefined || password === undefined || role === undefined) {
-    res.status(400).send({ error: 'Email, password and role have to be provided!' });
-  } else if(roleValue !== Role.ADMIN && roleValue !== Role.OPERATOR && roleValue !== Role.MODEL) {
-    res.status(400).send({ error: 'Invalid role provided, possible values are: ADMIN, OPERATOR and MODEL!' });
-  }
-
-  const user = await User.findOne({ email });
-
-  // user already exists
   if(user) {
-    res.status(403).send({ error: 'User with provided email already exists!' });
+    res.sendStatus(404);
   } else {
     const hash = crypto.createHash('sha256');
 
@@ -91,9 +68,9 @@ router.post('/', async (req, res, next) => {
 
     const newUser = new User();
 
-    newUser.email = email;
+    updateAttributesFromParams(req.body, newUser);
+
     newUser.passwordHash = hash.digest('hex');
-    newUser.role = role;
 
     await newUser.save();
 
