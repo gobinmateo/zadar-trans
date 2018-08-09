@@ -7,6 +7,8 @@ import { socket } from '../../index';
 import API from '../../Api';
 import 'react-dropdown/style.css'
 import Store from '../../stores/Store';
+import '../../css/intervention.css';
+import VehicleInformation from './VehicleInformation';
 
 type State = {
   name: String,
@@ -57,12 +59,14 @@ class UserInformation extends Component<State> {
     this.setState({ insurancePolicyNumber: e.target.value })
   };
 
-  handlePartnerChange = () => {
-
+  handlePartnerChange = (event) => {
+    const { value } = event;
+    this.setState({ partner: value});
   };
 
-  handleModelChange = () => {
-
+  handleModelChange = (event) => {
+    const { value } = event;
+    this.setState({ model: value});
   };
 
   handleFinishClick = async () => {
@@ -88,9 +92,10 @@ class UserInformation extends Component<State> {
   };
 
   render() {
+    const { model, partner } = this.state;
     return (
       <div className="row">
-        <div className="col s10 m8 l6 offset-l3 offset-m2">
+        <div className="col s10 m8 l6 offset-l4 offset-m3 custom--margin">
           <form action="">
             <div className="input-field">
               <input id="name"
@@ -144,8 +149,8 @@ class UserInformation extends Component<State> {
                     data-error="Required"/>
             </div>
 
-            <Dropdown onChange={this.handlePartnerChange} options={partners} placeholder="Select an option"/>
-            <Dropdown onChange={this.handleModelChange} options={models} placeholder="Select an option"/>
+            <Dropdown onChange={this.handlePartnerChange} value={partner} options={partners} placeholder="Select an option"/>
+            <Dropdown onChange={this.handleModelChange} value={model} options={models} placeholder="Select an option"/>
 
             <div className="input-field right">
               <a onClick={this.handleFinishClick} className="btn blue-grey darken-3">Finish</a>

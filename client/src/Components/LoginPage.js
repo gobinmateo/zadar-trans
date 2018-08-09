@@ -60,8 +60,8 @@ class LoginPage extends Component<State> {
   render() {
     return (
       <div className="container">
-        <div className="row">
-          <StyledDiv className="col s10 m8 l6 center">
+        <div className="row center">
+          <StyledDiv className="col s10 l6 m18 push-l3 push-m1 push-s1 custom--border">
             <form action="">
               <div className="input-field">
                 <i className="material-icons prefix">
