@@ -1,9 +1,11 @@
 import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
 import { withRouter } from 'react-router-dom';
+import Dropdown from 'react-dropdown';
+
 import { socket } from '../../index';
 import API from '../../Api';
-
+import 'react-dropdown/style.css'
 import Store from '../../stores/Store';
 
 type State = {
@@ -14,6 +16,14 @@ type State = {
 }
 
 let id = 185;
+
+const partners = [
+  'driver1', 'driver2', 'driver3'
+];
+
+const models = [
+  'insurance1', 'insurance2', 'insurance3'
+];
 
 @inject('Store')
 @observer
@@ -26,6 +36,8 @@ class UserInformation extends Component<State> {
       surname: '',
       phoneNumber: '',
       insurancePolicyNumber: '',
+      partner: '',
+      model: '',
     };
   }
 
@@ -43,6 +55,14 @@ class UserInformation extends Component<State> {
 
   handleInsurancePolicyNumberChange = (e) => {
     this.setState({ insurancePolicyNumber: e.target.value })
+  };
+
+  handlePartnerChange = () => {
+
+  };
+
+  handleModelChange = () => {
+
   };
 
   handleFinishClick = async () => {
@@ -123,6 +143,9 @@ class UserInformation extends Component<State> {
               <span className="helper-text"
                     data-error="Required"/>
             </div>
+
+            <Dropdown onChange={this.handlePartnerChange} options={partners} placeholder="Select an option"/>
+            <Dropdown onChange={this.handleModelChange} options={models} placeholder="Select an option"/>
 
             <div className="input-field right">
               <a onClick={this.handleFinishClick} className="btn blue-grey darken-3">Finish</a>

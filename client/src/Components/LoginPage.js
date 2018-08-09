@@ -61,8 +61,6 @@ class LoginPage extends Component<State> {
     return (
       <div className="container">
         <div className="row">
-          <div className="col s2 m4 l3">
-          </div>
           <StyledDiv className="col s10 m8 l6 center">
             <form action="">
               <div className="input-field">
@@ -96,7 +94,6 @@ class LoginPage extends Component<State> {
                 <span className="helper-text"
                       data-error="Invalid password"/>
               </div>
-
               <div className="input-field right">
                 <button className="btn blue-grey darken-3"
                         onClick={this.handleLogin}>
