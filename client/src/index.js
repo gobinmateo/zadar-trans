@@ -6,7 +6,7 @@ import io from 'socket.io-client';
 
 import App from './App';
 import registerServiceWorker from './registerServiceWorker';
-import Store from './stores/Store';
+import Store from './Store/Store';
 
 import 'materialize-css';
 import 'materialize-css/dist/css/materialize.min.css';

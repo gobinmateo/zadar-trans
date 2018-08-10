@@ -5,7 +5,7 @@ import { inject, observer } from 'mobx-react';
 import * as M from 'materialize-css';
 import styled from 'styled-components';
 
-import Store from '../stores/Store';
+import Store from '../Store/Store';
 
 const BtnCustom = styled.button`
   margin-right: 5%;

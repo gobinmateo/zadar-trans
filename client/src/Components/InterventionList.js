@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
 
-import Store from '../stores/Store';
+import Store from '../Store/Store';
 import { socket } from '../index';
 import API from '../Api';
 

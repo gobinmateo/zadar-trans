@@ -54,7 +54,7 @@ class VehicleInformation extends Component<State> {
   render() {
     return (
       <div className="row">
-        <div className="col s10 m8 l6 offset-l4 offset-m3 custom--margin">
+        <div className="col s12 m8 l6 offset-l2 offset-m2 custom--margin">
           <form action="">
             <div className="input-field">
               <input id="sessionNumber"
@@ -110,7 +110,7 @@ class VehicleInformation extends Component<State> {
 
             <div className="input-field">
               <input type="text"
-                     className="datepicker"
+                     className="datepicker validate"
                      id="firstRegistrationDate"
                      required/>
                 <label htmlFor="firstRegistrationDate">
@@ -118,10 +118,6 @@ class VehicleInformation extends Component<State> {
                 </label>
                 <span className="helper-text"
                     data-error="Required"/>
-            </div>
-
-            <div className="input-field right">
-              <a onClick={this.handleFinishClick} className="btn blue-grey darken-3">Finish</a>
             </div>
           </form>
         </div>

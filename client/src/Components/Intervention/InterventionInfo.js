@@ -48,12 +48,13 @@ class InterventionInfo extends Component<State> {
   render() {
     return (
       <div className="row">
-        <div className="col s10 m8 l6 offset-l4 offset-m3 custom--margin">
+        {/*<div className="col s10 m8 l6 offset-l4 offset-m3 custom--margin">*/}
+        <div className="col s12 m8 l6 offset-l2 offset-m2 custom--margin">
           <form action="">
             <div className="input-field">
               <input id="receiveTime"
                      type="text"
-                     className="timepicker validate"
+                     className="timepicker"
                      required/>
               <label htmlFor="receiveTime">
                 Receiving time
@@ -65,7 +66,7 @@ class InterventionInfo extends Component<State> {
             <div className="input-field">
               <input id="arrivalTime"
                      type="text"
-                     className="timepicker validate"
+                     className="timepicker"
                      required/>
               <label htmlFor="arrivalTime">
                 Arrival time

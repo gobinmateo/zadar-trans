@@ -6,7 +6,7 @@ import Dropdown from 'react-dropdown';
 import { socket } from '../../index';
 import API from '../../Api';
 import 'react-dropdown/style.css'
-import Store from '../../stores/Store';
+import Store from '../../Store/Store';
 import '../../css/intervention.css';
 import VehicleInformation from './VehicleInformation';
 
@@ -92,10 +92,10 @@ class UserInformation extends Component<State> {
   };
 
   render() {
-    const { model, partner } = this.state;
+    const { model, partner, isLoading } = this.state;
     return (
       <div className="row">
-        <div className="col s10 m8 l6 offset-l4 offset-m3 custom--margin">
+        <div className="col s12 m8 l6 offset-l2 offset-m2 custom--margin">
           <form action="">
             <div className="input-field">
               <input id="name"
