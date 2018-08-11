@@ -1,0 +1,88 @@
+/*
+    Tabs
+ */
+
+.tabs .tab a {
+    color: #546e7a !important;
+}
+
+.tabs .tab a:focus, .tabs .tab a:focus.active {
+    background-color: unset !important;
+}
+
+.tabs .tab {
+    text-align: left !important;
+}
+
+.tabs-vertical .tab:hover {
+    border-right: 3px solid #eeeeee;
+}
+
+.tabs-vertical .indicator {
+    display: none;
+}
+
+.tabs-vertical .tab .active {
+    border-right: 3px solid #546e7a;
+}
+
+/*
+    User info
+ */
+
+.Dropdown-control {
+    color: #9e9e9e;
+    border: 0 !important;
+    margin-bottom: 1rem;
+    margin-top: 1rem;
+}
+
+/*
+    Vehicle information
+ */
+
+.datepicker-date-display {
+    background-color: #546e7a !important;
+}
+
+.datepicker-table td.is-today {
+    color: #546e7a !important;
+}
+
+.datepicker-table td.is-selected {
+    background-color: #546e7a !important;
+    color: #ffffff !important;
+}
+
+.datepicker-cancel, .datepicker-clear, .datepicker-today, .datepicker-done {
+    color: #546e7a !important;
+}
+
+/*
+    User information
+ */
+
+.custom--margin {
+    margin-top: 2rem;
+}
+
+/*
+    Intervention info
+ */
+
+.timepicker-digital-display {
+    background-color: #546e7a !important;
+}
+
+.timepicker-close {
+    color: #546e7a !important;
+}
+
+/*
+    Login page
+ */
+
+.custom--border {
+    border:2px solid #546e7a;
+    border-radius: 10px;
+}

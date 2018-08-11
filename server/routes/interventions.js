@@ -19,7 +19,6 @@ router.delete('/:id', async (req, res, next) => {
 
 router.get('/', async (req, res, next) => {
   const interventions = await Intervention.find();
-
   res.json(interventions);
 });
 
@@ -57,8 +56,8 @@ router.post('/', async (req, res, next) => {
 
     updateAttributesFromParams(req.body, newIntervention);
 
+    console.log('NEW INTERVENTION ', newIntervention);
     await newIntervention.save();
-
     res.status(200).send({ message: 'Intervention successfully added to database.' });
   }
 });

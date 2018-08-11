@@ -1,12 +1,21 @@
 import React, { Component } from 'react';
 import axios from 'axios';
 import styled from 'styled-components';
+import { inject, observer } from 'mobx-react';
+import { withRouter } from 'react-router-dom';
 
 const StyledDiv = styled.div`
   margin-top: 50px;
 `;
 
-class LoginPage extends Component {
+type State = {
+  email: String,
+  password: String
+};
+
+@inject('Store')
+@observer
+class LoginPage extends Component<State> {
   constructor(props) {
     super(props);
     this.state = {
@@ -25,6 +34,7 @@ class LoginPage extends Component {
   };
 
   handleLogin = async (e) => {
+    const { history } = this.props;
     e.preventDefault();
     const { email, password} = this.state;
 
@@ -40,16 +50,18 @@ class LoginPage extends Component {
       },
     });
 
+    this.props.Store.login(true);
+
     if(response.data.token) document.cookie = `token=${ response.data.token }`;
+
+    history.push('/');
   };
 
   render() {
     return (
       <div className="container">
-        <div className="row">
-          <div className="col s2 m4 l3">
-          </div>
-          <StyledDiv className="col s10 m8 l6 center">
+        <div className="row center">
+          <StyledDiv className="col s10 l6 m18 push-l3 push-m1 push-s1 custom--border">
             <form action="">
               <div className="input-field">
                 <i className="material-icons prefix">
@@ -82,7 +94,6 @@ class LoginPage extends Component {
                 <span className="helper-text"
                       data-error="Invalid password"/>
               </div>
-
               <div className="input-field right">
                 <button className="btn blue-grey darken-3"
                         onClick={this.handleLogin}>
@@ -97,4 +108,4 @@ class LoginPage extends Component {
   }
 }
 
-export default LoginPage;
+export default withRouter(LoginPage);
