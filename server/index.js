@@ -6,13 +6,10 @@ import cors from 'cors';
 import dotenv from 'dotenv';
 import express from 'express';
 import mongoose from 'mongoose';
-<<<<<<< HEAD
 import session from 'express-session';
 import uuid from 'uuid/v4';
-=======
 import http from 'http';
 import socketIO from 'socket.io';
->>>>>>> master
 
 import companyRoutes from './routes/companies';
 import interventionRoutes from './routes/interventions';
