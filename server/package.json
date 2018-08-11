@@ -20,7 +20,8 @@
     "express-acl": "^2.0.2",
     "jsonwebtoken": "^8.3.0",
     "mongoose": "^5.2.6",
-    "nodemon": "^1.18.3"
+    "nodemon": "^1.18.3",
+    "uuid": "^3.3.2"
   },
   "devDependencies": {
     "babel-cli": "^6.26.0",

@@ -2,7 +2,6 @@ import crypto from 'crypto';
 import express from 'express';
 import updateAttributesFromParams from '../utils/paramsParser';
 
-
 import Role from '../utils/role';
 import User from '../models/user.model';
 
@@ -42,13 +41,14 @@ router.put('/:email', async (req, res, next) => {
   if(!user) {
     res.sendStatus(404);
   } else {
-    const hash = crypto.createHash('sha256');
-
-    hash.update(password);
+    const salt = crypto.randomBytes(16).toString('base64');
+    const hash = crypto.createHmac('sha512',salt)
+                       .update(req.body.password)
+                       .digest("base64");
 
     updateAttributesFromParams(req.body, user);
 
-    user.passwordHash = hash.digest('hex');
+    user.passwordHash = salt + "$" + hash;
 
     await user.save();
 
@@ -62,19 +62,20 @@ router.post('/', async (req, res, next) => {
   if(user) {
     res.sendStatus(404);
   } else {
-    const hash = crypto.createHash('sha256');
-
-    hash.update(password);
+    const salt = crypto.randomBytes(16).toString('base64');
+    const hash = crypto.createHmac('sha512',salt)
+                       .update(req.body.password)
+                       .digest("base64");
 
     const newUser = new User();
 
     updateAttributesFromParams(req.body, newUser);
 
-    newUser.passwordHash = hash.digest('hex');
+    newUser.passwordHash = salt + "$" + hash;
 
     await newUser.save();
 
-    res.status(200).send({ message: 'User successfully added to database.' });
+    res.sendStatus(200);
   }
 });
 

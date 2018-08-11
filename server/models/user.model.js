@@ -1,15 +1,14 @@
 import mongoose from 'mongoose';
 import Role from '../utils/role';
 
-const user = new mongoose.Schema({
+const userSchema = new mongoose.Schema({
   email: {
     type: String,
     unique: true,
     required: true,
   },
-  passwordHash: {
+  password: {
     type: String,
-    unique: true,
     required: true,
   },
   role: {
@@ -19,7 +18,15 @@ const user = new mongoose.Schema({
     default: Role.OPERATOR.name
   },
 });
+userSchema.methods.comparePassword = (password) => {
+  const passwordFields = password.split('$');
 
-const User = mongoose.model('User', user);
+  const salt = passwordFields[0];
+  const hash = crypto.createHmac('sha512', salt).update(password).digest("base64");
+
+  return hash === passwordFields[1];
+}
+
+const User = mongoose.model('User', userSchema);
 
 export default User;

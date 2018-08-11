@@ -33,7 +33,7 @@ class LoginPage extends Component {
       baseURL: 'http://localhost:8080',
     });
 
-    const response = await connection.post('/login', {
+    const response = await connection.post('/auth/login', {
       data: {
         email: email,
         password: password

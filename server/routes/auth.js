@@ -1,20 +1,27 @@
 import crypto from 'crypto';
 import express from 'express';
-import jwt from 'jsonwebtoken';
+import verifyUser from '../authentication/verify.user.middleware';
 
 import User from '../models/user.model';
 
 const router = express.Router();
 
-router.post('/', async (req, res, next) => {
-  const { email, password } = req.body.data;
-  const token = req.cookies.token;
+router.post('/login', verifyUser, async (req, res, next) => {
+  try {
+    const salt = crypto.randomBytes(16).toString('base64');
+    const hash = crypto.createHmac('sha512', salt).update(refreshId).digest("base64");
+    req.body.refreshKey = salt;
+
+    const token = jwt.sign(req.body, process.env.JWT_SECRET);
+
+    res.status(201).send({ accessToken: token });
+  } catch (err) {
+    res.sendStatus(500);
+  }
 
   // session was previously saved in cookie
   if(token !== undefined && token !== "") {
     const payload = jwt.verify(token, process.env.JWT_SECRET);
-
-    console.log(payload);
 
     res.sendStatus(200);
 
@@ -32,6 +39,7 @@ router.post('/', async (req, res, next) => {
   if(!user) {
     res.status(403).send({ error: 'User with provided email does not exist!' });
   } else {
+    console.log(user.comparePassword(password));
     const hash = crypto.createHash('sha256');
 
     hash.update(password);
