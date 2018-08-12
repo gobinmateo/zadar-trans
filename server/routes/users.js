@@ -14,19 +14,20 @@ router.delete('/', async (req, res, next) => {
 });
 
 router.delete('/:email', async (req, res, next) => {
-  await User.deleteOne({ email: req.body.email });
+  await User.deleteOne({ email: req.params.email });
 
   res.sendStatus(204);
 });
 
 router.get('/', async (req, res, next) => {
+  console.log('ROLE', req.session.role)
   const users = await User.find();
 
   res.json(users);
 });
 
 router.get('/:email', async (req, res, next) => {
-  const user = await User.findOne({email: req.body.email});
+  const user = await User.findOne({email: req.params.email});
 
   if(!user) {
     res.sendStatus(404);
@@ -36,7 +37,7 @@ router.get('/:email', async (req, res, next) => {
 });
 
 router.put('/:email', async (req, res, next) => {
-  const user = await User.findOne({ email: req.body.email });
+  const user = await User.findOne({ email: req.params.email });
 
   if(!user) {
     res.sendStatus(404);
@@ -48,7 +49,7 @@ router.put('/:email', async (req, res, next) => {
 
     updateAttributesFromParams(req.body, user);
 
-    user.passwordHash = salt + "$" + hash;
+    user.password = salt + "$" + hash;
 
     await user.save();
 
@@ -57,7 +58,7 @@ router.put('/:email', async (req, res, next) => {
 });
 
 router.post('/', async (req, res, next) => {
-  const user = await User.findOne({ email : req.body.email });
+  const user = await User.findOne({ email : req.params.email });
 
   if(user) {
     res.sendStatus(404);
@@ -71,7 +72,9 @@ router.post('/', async (req, res, next) => {
 
     updateAttributesFromParams(req.body, newUser);
 
-    newUser.passwordHash = salt + "$" + hash;
+    newUser.password = salt + "$" + hash;
+
+    console.log(newUser.password)
 
     await newUser.save();
 

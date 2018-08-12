@@ -58,7 +58,7 @@ router.post('/', async (req, res, next) => {
 
     console.log('NEW INTERVENTION ', newIntervention);
     await newIntervention.save();
-    res.status(200).send({ message: 'Intervention successfully added to database.' });
+    res.status(200).json({ intervention });
   }
 });
 
