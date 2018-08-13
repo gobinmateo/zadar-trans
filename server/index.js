@@ -14,6 +14,7 @@ import uuid from 'uuid/v4';
 import authRoutes from './routes/auth';
 import companyRoutes from './routes/companies';
 import interventionRoutes from './routes/interventions';
+import partnerRoutes from './routes/partners';
 import userRoutes from './routes/users';
 
 import verifyToken from './authentication/verify.token.middleware';
@@ -35,7 +36,7 @@ app.use(cors({ credentials: true, origin: 'http://localhost:8000'}));
 
 // allows access to req object => https://stackoverflow.com/questions/38306569/what-does-body-parser-do-with-express
 app.use(bodyParser.json());
-
+app.use(express.json());
 app.use(cookieParser(process.env.SESSION_SECRET));
 
 app.use(
@@ -61,11 +62,12 @@ app.use((req, res, next) => {
 
 app.use(verifyToken);
 
-app.use(acl.authorize.unless({ path: ['/auth/login', '/auth/logout'] }));
+//app.use(acl.authorize.unless({ path: ['/auth/login', '/auth/logout'] }));
 
 app.use('/auth', authRoutes);
 app.use('/companies', companyRoutes);
 app.use('/interventions', interventionRoutes);
+app.use('/partners', partnerRoutes);
 app.use('/users', userRoutes);
 
 
