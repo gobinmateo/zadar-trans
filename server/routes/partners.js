@@ -1,90 +1,56 @@
 import express from 'express';
-
+import { body, param } from 'express-validator/check';
+import * as PartnersController from '../controllers/partners.controller';
 import Partner from '../models/partner.model';
+import verifyRequest from '../utils/verifyRequest.middleware';
 
 const router = express.Router();
 
-router.delete('/', async (req, res, next) => {
-  await Partner.deleteMany();
+router.delete('/', [
+  PartnersController.deleteAll
+]);
 
-  res.sendStatus(200);
-});
+router.delete('/:name', [
+  param('name', 'Name has to be under 30 characters long').isLength({ max: 30 }),
+  verifyRequest,
+  PartnersController.deleteByName
+]);
 
-router.delete('/:id', async (req, res, next) => {
-  const id = req.params.id;
+router.get('/', [
+  PartnersController.getAllPartners
+]);
 
-  if(id === undefined) res.send({ error: 'Email has to be provided!' });
+router.get('/:name', [
+  param('name', 'Name has to be under 30 characters long').isLength({ max: 30 }),
+  verifyRequest,
+  PartnersController.getByName
+]);
 
-  await Partner.deleteOne({id: id});
+router.put('/:name', [
+  param('name', 'Name has to be under 30 characters long').isLength({ max: 30 }),
+  body('address', 'Address has to be provided').not().isEmpty(),
+  body('address', 'Address has to be under 30 characters long').isLength({ max: 30 }),
+  body('contactNumber', 'Contact number has to be provided').not().isEmpty(),
+  body('contactNumber', 'Invalid number format').isNumeric(),
+  body('name', 'Chaning partner name not allowed').isEmpty(),
+  body('vehicleType', 'Vehicle type has to be provided').not().isEmpty(),
+  body('vehicleType', 'Vehicle type has to be under 30 characters long').isLength({ max: 30 }),
+  verifyRequest,
+  PartnersController.updateByName
+]);
 
-  res.sendStatus(200);
-});
-
-router.get('/', async (req, res, next) => {
-  const users = await Partner.find();
-
-  res.json(users);
-});
-
-router.get('/:id', async (req, res, next) => {
-  const id = req.params.id;
-
-  if(id === undefined) res.send({ error: 'Email has to be provided!' });
-
-  const partner = await Partner.findOne({id: id});
-
-  if(!partner) {
-    res.status(403).send({ error: 'Partner with provided id does not exist!' });
-  } else {
-    res.json(partner);
-  }
-});
-
-router.put('/', async (req, res, next) => {
-  const { id, name } = req.body;
-
-  // both parameters have to be present
-  if(id === undefined || name === undefined) {
-    res.status(400).send({ error: 'Id and name have to be provided!' });
-  }
-
-  const partner = await Partner.findOne({ id });
-
-  // partner doesn't exist
-  if(!partner) {
-    res.status(403).send({ error: 'Partner with provided id does not exist!' });
-  } else {
-    partner.name = name;
-
-    await partner.save();
-
-    res.status(200).send({ message: 'Partner successfully updated.' });
-  }
-});
-
-router.post('/', async (req, res, next) => {
-  const { id, name } = req.body;
-
-  // both parameters have to be present
-  if(id === undefined || name === undefined) {
-    res.status(400).send({ error: 'Id and name have to be provided!' });
-  }
-
-  const partner = await Partner.findOne({ id });
-
-  // partner already exists
-  if(partner) {
-    res.status(403).send({ error: 'Partner with provided id already exists!' });
-  } else {
-    const newPartner = new Partner();
-
-    newPartner.id = id;
-    newPartner.name = name;
-
-    await newPartner.save();
-
-    res.status(200).send({ message: 'Partner successfully added to database.' });
-  }
-});
+router.post('/', [
+  body('address', 'Address has to be provided').not().isEmpty(),
+  body('address', 'Address has to be under 30 characters long').isLength({ max: 30 }),
+  body('contactNumber', 'Contact number has to be provided').not().isEmpty(),
+  body('contactNumber', 'Invalid number format').isNumeric(),
+  body('name', 'Name has to be provided').not().isEmpty(),
+  body('name', 'Name has to be under 30 characters long').isLength({ max: 30 }),
+  body('name').custom(Partner.checkNameInUse),
+  body('vehicleType', 'Vehicle type has to be provided').not().isEmpty(),
+  body('vehicleType', 'Vehicle type has to be under 30 characters long').isLength({ max: 30 }),
+  verifyRequest,
+  PartnersController.createPartner
+]);
 
 export default router;

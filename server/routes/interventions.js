@@ -1,176 +1,44 @@
 import express from 'express';
+import { body, param } from 'express-validator/check';
+import * as InterventionController from '../controllers/interventions.controller';
+import verifyRequest from '../utils/verifyRequest.middleware';
 
 import Intervention from '../models/intervention.model';
 
 const router = express.Router();
 
-router.delete('/', async (req, res, next) => {
-  await Intervention.deleteMany();
+router.delete('/', [
+  InterventionController.deleteAll
+]);
 
-  res.sendStatus(200);
-});
+router.delete('/:id', [
+  param('id', 'id has to be under 30 characters long').isLength({ max: 30 }),
+  verifyRequest,
+  InterventionController.deleteById
+]);
 
-router.delete('/:id', async (req, res, next) => {
-  const id = req.params.id;
+router.get('/', [
+  InterventionController.getAll
+]);
 
-  if(id === undefined) res.send({ error: 'Id has to be provided!' });
+router.get('/:id', [
+  param('id', 'id has to be under 30 characters long').isLength({ max: 30 }),
+  verifyRequest,
+  InterventionController.getById
+]);
 
-  await Intervention.deleteOne({ id });
+router.put('/:id', [
+  param('id', 'id has to be under 30 characters long').isLength({ max: 30 }),
+  verifyRequest,
+  InterventionController.updateById
+]);
 
-  res.sendStatus(200);
-});
-
-router.get('/', async (req, res, next) => {
-  const interventions = await Intervention.find();
-  res.json(interventions);
-});
-
-router.get('/:id', async (req, res, next) => {
-  const id = req.params.id;
-
-  if(id === undefined) res.send({ error: 'Id has to be provided!' });
-
-  const intervention = await Intervention.findOne({ id });
-
-  if(!intervention) {
-    res.status(403).send({ error: 'Intervention with provided id does not exist!' });
-  } else {
-    res.json(intervention);
-  }
-});
-
-router.put('/', async (req, res, next) => {
-  const {
-    accidentArrivalDate,
-    accidentLocation,
-    additionalVechileInfo,
-    chassisNumber,
-    checkoutRemark,
-    companyID,
-    dischargeLocation,
-    firstRegistrationDate,
-    id,
-    insurancePolicyNumber,
-    interventionCompletionDate,
-    interventionRecievalDate,
-    interventionStatus,
-    partnerID,
-    paymentMethod,
-    peopleCount,
-    phoneNumber,
-    registrationPlate,
-    remark,
-    vehicleModel,
-    vehicleStatus,
-    victimName,
-  } = req.body;
-
-  if(id === undefined) {
-    res.status(400).send({ error: 'Intervention id has to be provided!' });
-  }
-
-  const intervention = await Intervention.findOne({ id });
-
-  // intervention doesn't exist
-  if(!intervention) {
-    res.status(403).send({ error: 'Intervention with provided id does not exist!' });
-  } else {
-    intervention.accidentArrivalDate = accidentArrivalDate;
-    intervention.accidentLocation = accidentLocation;
-    intervention.additionalVechileInfo = additionalVechileInfo;
-    intervention.chassisNumber = chassisNumber;
-    intervention.checkoutRemark = checkoutRemark;
-    intervention.companyID = companyID;
-    intervention.dischargeLocation = dischargeLocation;
-    intervention.firstRegistrationDate = firstRegistrationDate;
-    intervention.id = id;
-    intervention.insurancePolicyNumber = insurancePolicyNumber;
-    intervention.interventionCompletionDate = interventionCompletionDate;
-    intervention.interventionRecievalDate = interventionRecievalDate;
-    intervention.interventionStatus = interventionStatus;
-    intervention.partnerID = partnerID;
-    intervention.paymentMethod = paymentMethod;
-    intervention.peopleCount = peopleCount;
-    intervention.phoneNumber = phoneNumber;
-    intervention.registrationPlate = registrationPlate;
-    intervention.remark = remark;
-    intervention.vehicleModel = vehicleModel;
-    intervention.vehicleStatus = vehicleStatus;
-    intervention.victimName = victimName;
-
-    await intervention.save();
-
-    res.status(200).send({ message: 'Intervention successfully updated.' });
-  }
-});
-
-router.post('/', async (req, res, next) => {
-  const {
-    accidentArrivalDate,
-    accidentLocation,
-    additionalVechileInfo,
-    chassisNumber,
-    checkoutRemark,
-    companyID,
-    dischargeLocation,
-    firstRegistrationDate,
-    id,
-    insurancePolicyNumber,
-    interventionCompletionDate,
-    interventionRecievalDate,
-    interventionStatus,
-    partnerID,
-    paymentMethod,
-    peopleCount,
-    phoneNumber,
-    registrationPlate,
-    remark,
-    vehicleModel,
-    vehicleStatus,
-    victimName,
-  } = req.body;
-
-  // both parameters have to be present
-  if(id === undefined) {
-    console.log('ID UNDEFINED');
-    return res.status(400).send({ error: 'Intervention id has to be provided!' });
-  }
-
-  const intervention = await Intervention.findOne({ id });
-
-  if(intervention) {
-    console.log('ID ALREADY IN USE');
-    res.status(403).send({ error: 'Intervention with provided id already exists!' });
-  } else {
-    const newIntervention = new Intervention();
-
-    newIntervention.accidentArrivalDate = accidentArrivalDate;
-    newIntervention.accidentLocation = accidentLocation;
-    newIntervention.additionalVechileInfo = additionalVechileInfo;
-    newIntervention.chassisNumber = chassisNumber;
-    newIntervention.checkoutRemark = checkoutRemark;
-    newIntervention.companyID = companyID;
-    newIntervention.dischargeLocation = dischargeLocation;
-    newIntervention.firstRegistrationDate = firstRegistrationDate;
-    newIntervention.id = id;
-    newIntervention.insurancePolicyNumber = insurancePolicyNumber;
-    newIntervention.interventionCompletionDate = interventionCompletionDate;
-    newIntervention.interventionRecievalDate = interventionRecievalDate;
-    newIntervention.interventionStatus = interventionStatus;
-    newIntervention.partnerID = partnerID;
-    newIntervention.paymentMethod = paymentMethod;
-    newIntervention.peopleCount = peopleCount;
-    newIntervention.phoneNumber = phoneNumber;
-    newIntervention.registrationPlate = registrationPlate;
-    newIntervention.remark = remark;
-    newIntervention.vehicleModel = vehicleModel;
-    newIntervention.vehicleStatus = vehicleStatus;
-    newIntervention.victimName = victimName;
-
-    console.log('NEW INTERVENTION ', newIntervention);
-    await newIntervention.save();
-    res.status(200).send({ message: 'Intervention successfully added to database.' });
-  }
-});
+router.post('/', [
+  body('id', 'Id has to be provided').not().isEmpty(),
+  body('id', 'Id has to be under 30 characters long').isLength({ max: 30 }),
+  body('id').custom(Intervention.checkIdInUse),
+  verifyRequest,
+  InterventionController.createNew
+]);
 
 export default router;
