@@ -1,67 +1,56 @@
 import express from 'express';
-import updateAttributesFromParams from '../utils/paramsParser';
-
-
+import { body, param } from 'express-validator/check';
+import * as PartnersController from '../controllers/partners.controller';
 import Partner from '../models/partner.model';
+import verifyRequest from '../utils/verifyRequest.middleware';
 
 const router = express.Router();
 
-router.delete('/', async (req, res, next) => {
-  await Partner.deleteMany();
+router.delete('/', [
+  PartnersController.deleteAll
+]);
 
-  res.sendStatus(204);
-});
+router.delete('/:name', [
+  param('name', 'Name has to be under 30 characters long').isLength({ max: 30 }),
+  verifyRequest,
+  PartnersController.deleteByName
+]);
 
-router.delete('/:id', async (req, res, next) => {
-  await Partner.deleteOne({ id: req.params.id});
+router.get('/', [
+  PartnersController.getAllPartners
+]);
 
-  res.sendStatus(204);
-});
+router.get('/:name', [
+  param('name', 'Name has to be under 30 characters long').isLength({ max: 30 }),
+  verifyRequest,
+  PartnersController.getByName
+]);
 
-router.get('/', async (req, res, next) => {
-  const partners = await Partner.find();
+router.put('/:name', [
+  param('name', 'Name has to be under 30 characters long').isLength({ max: 30 }),
+  body('address', 'Address has to be provided').not().isEmpty(),
+  body('address', 'Address has to be under 30 characters long').isLength({ max: 30 }),
+  body('contactNumber', 'Contact number has to be provided').not().isEmpty(),
+  body('contactNumber', 'Invalid number format').isNumeric(),
+  body('name', 'Chaning partner name not allowed').isEmpty(),
+  body('vehicleType', 'Vehicle type has to be provided').not().isEmpty(),
+  body('vehicleType', 'Vehicle type has to be under 30 characters long').isLength({ max: 30 }),
+  verifyRequest,
+  PartnersController.updateByName
+]);
 
-  res.json(partners);
-});
-
-router.get('/:id', async (req, res, next) => {
-  const partner = await Partner.findOne({ id: req.params.id });
-
-  if(!partner) {
-    res.sendStatus(404);
-  } else {
-    res.json(partner);
-  }
-});
-
-router.put('/:id', async (req, res, next) => {
-  const partner = await Partner.findOne({ id: req.params.id });
-
-  if(!partner) {
-    res.sendStatus(404);
-  } else {
-    updateAttributesFromParams(req.body, partner);
-
-    await partner.save();
-
-    res.sendStatus(200);
-  }
-});
-
-router.post('/', async (req, res, next) => {
-  const partner = await Partner.findOne({ id: req.body.id });
-
-  if(partner) {
-    res.sendStatus(404);
-  } else {
-    const newPartner = new Partner();
-
-    updateAttributesFromParams(req.body, newPartner);
-
-    await newPartner.save();
-
-    res.sendStatus(200);
-  }
-});
+router.post('/', [
+  body('address', 'Address has to be provided').not().isEmpty(),
+  body('address', 'Address has to be under 30 characters long').isLength({ max: 30 }),
+  body('contactNumber', 'Contact number has to be provided').not().isEmpty(),
+  body('contactNumber', 'Invalid number format').isNumeric(),
+  body('name', 'Name has to be provided').not().isEmpty(),
+  body('name', 'Name has to be under 30 characters long').isLength({ max: 30 }),
+  body('name').custom(Partner.checkNameInUse),
+  body('vehicleType', 'Vehicle type has to be provided').not().isEmpty(),
+  body('vehicleType', 'Vehicle type has to be under 30 characters long').isLength({ max: 30 }),
+  verifyRequest,
+  PartnersController.createPartner
+]);
 
 export default router;

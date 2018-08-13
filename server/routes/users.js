@@ -1,85 +1,41 @@
-import crypto from 'crypto';
 import express from 'express';
-import updateAttributesFromParams from '../utils/paramsParser';
-
-import Role from '../utils/role';
+import { body, param } from 'express-validator/check';
+import * as UsersController from '../controllers/users.controller';
 import User from '../models/user.model';
+import Role from '../utils/role.enum';
+import verifyRequest from '../utils/verifyRequest.middleware';
 
 const router = express.Router();
 
-router.delete('/', async (req, res, next) => {
-  await User.deleteMany();
+router.delete('/', [
+  UsersController.deleteAll
+]);
 
-  res.sendStatus(204);
-});
+router.delete('/:email', [
+  param('email', 'Invalid email format').isEmail(),
+  verifyRequest,
+  UsersController.deleteByEmail
+]);
 
-router.delete('/:email', async (req, res, next) => {
-  await User.deleteOne({ email: req.params.email });
+router.get('/', [
+  UsersController.getAllUsers
+])
 
-  res.sendStatus(204);
-});
+router.get('/:email', [
+  param('email', 'Invalid email format').isEmail(),
+  verifyRequest,
+  UsersController.getByEmail
+]);
 
-router.get('/', async (req, res, next) => {
-  console.log('ROLE', req.session.role)
-  const users = await User.find();
-
-  res.json(users);
-});
-
-router.get('/:email', async (req, res, next) => {
-  const user = await User.findOne({email: req.params.email});
-
-  if(!user) {
-    res.sendStatus(404);
-  } else {
-    res.json(user);
-  }
-});
-
-router.put('/:email', async (req, res, next) => {
-  const user = await User.findOne({ email: req.params.email });
-
-  if(!user) {
-    res.sendStatus(404);
-  } else {
-    const salt = crypto.randomBytes(16).toString('base64');
-    const hash = crypto.createHmac('sha512',salt)
-                       .update(req.body.password)
-                       .digest("base64");
-
-    updateAttributesFromParams(req.body, user);
-
-    user.password = salt + "$" + hash;
-
-    await user.save();
-
-    res.sendStatus(200);
-  }
-});
-
-router.post('/', async (req, res, next) => {
-  const user = await User.findOne({ email : req.params.email });
-
-  if(user) {
-    res.sendStatus(404);
-  } else {
-    const salt = crypto.randomBytes(16).toString('base64');
-    const hash = crypto.createHmac('sha512',salt)
-                       .update(req.body.password)
-                       .digest("base64");
-
-    const newUser = new User();
-
-    updateAttributesFromParams(req.body, newUser);
-
-    newUser.password = salt + "$" + hash;
-
-    console.log(newUser.password)
-
-    await newUser.save();
-
-    res.sendStatus(200);
-  }
-});
+router.post('/', [
+  body('email', 'Email has to be provided').not().isEmpty(),
+  body('email', 'Invalid email format').isEmail(),
+  body('email').custom(User.checkEmailInUse),
+  body('password', 'Password has to be provided').not().isEmpty(),
+  body('password', 'Password has to be between 5 and 20 characters long').isLength({ min: 5, max: 20 }),
+  body('role', 'Invalid role value').custom(Role.validateRole),
+  verifyRequest,
+  UsersController.createUser
+]);
 
 export default router;

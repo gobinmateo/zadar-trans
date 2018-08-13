@@ -1,29 +1,23 @@
-import crypto from 'crypto';
 import express from 'express';
-import jwt from 'jsonwebtoken';
+import { body, param } from 'express-validator/check';
+import verifyRequest from '../utils/verifyRequest.middleware';
 import verifyUser from '../authentication/verify.user.middleware';
-
-import User from '../models/user.model';
+import * as AuthController from '../controllers/auth.controller';
 
 const router = express.Router();
 
-router.post('/login', verifyUser, async (req, res, next) => {
-  const { email, password, role } = req.body.data;
-  const payload = { role }
+router.post('/login', [
+  body('email', 'Email has to be provided').not().isEmpty(),
+  body('email', 'Invalid email format').isEmail(),
+  body('password', 'Password has to be provided').not().isEmpty(),
+  body('password', 'Password has to be between 5 and 20 characters long').isLength({ min: 5, max: 20 }),
+  verifyRequest,
+  verifyUser,
+  AuthController.login
+]);
 
-  const token = jwt.sign(payload, process.env.JWT_SECRET);
-
-  res.json({ token });
-});
-
-router.get('/logout', (req,res) => {
-  req.session.destroy((err) => {
-    if (err) {
-      console.log(err);
-    } else {
-      res.status(200).json({ logout: true })
-    }
-  });
-});
+router.get('/logout', [
+  AuthController.logout
+]);
 
 export default router;
