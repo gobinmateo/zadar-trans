@@ -1,7 +1,7 @@
 import jwt from 'jsonwebtoken';
 
 const login = async (req, res, next) => {
-  const { email, password, role } = req.body.data;
+  const { email, password, role } = req.body;
   const payload = { role }
 
   const token = jwt.sign(payload, process.env.JWT_SECRET);
