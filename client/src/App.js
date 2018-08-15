@@ -7,6 +7,7 @@ import LoginPage from './Containers/LoginPage';
 import RequireLogin from './HOC/RequireLogin';
 
 class App extends Component {
+
   render() {
     return (
       <div>

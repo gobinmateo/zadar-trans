@@ -57,8 +57,6 @@ class Navbar extends Component {
         this.props.Store.login(false);
 
         Cookies.remove('token');
-
-        history.push('/login');
       }
     } catch(error) {
       console.log(error);

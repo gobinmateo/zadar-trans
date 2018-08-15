@@ -14,19 +14,9 @@ type State = {
 @observer
 class InterventionList extends Component<State> {
 
-  constructor(props) {
-    super(props);
-
-    this.state = {
-      openInterventions: []
-    };
-  }
-
   componentDidMount() {
     socket.on('INTERVENTION_CREATED', (intervention) => {
-      this.setState({
-        openInterventions: [...this.state.openInterventions, intervention]
-      });
+      this.props.handleInterventionReceived(intervention);
     });
   }
 
@@ -35,23 +25,25 @@ class InterventionList extends Component<State> {
   }
 
   render() {
+    const { openInterventions } = this.props;
+
     return (
       <div>
         <div className="row">
-          {this.state.openInterventions[0] && this.state.openInterventions[0].length > 0 &&
-            this.state.openInterventions[0].map((intervention, index) =>
+          {openInterventions && openInterventions.length > 0 &&
+            openInterventions.map((intervention, index) =>
               <div key={index} className="col s6 m4 l4">
                 <div className="card blue-grey darken-1">
                   <div className="card-content white-text">
-                    <span className="card-title">{ intervention.id }</span>
-                    <p> { intervention._id } </p>
+                    <span className="card-title">{ intervention._id }</span>
+                    <p> { intervention.victimName } </p>
                   </div>
                 </div>
               </div>
             )}
         </div>
       </div>
-    )
+    );
   }
 }
 

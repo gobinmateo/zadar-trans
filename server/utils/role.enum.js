@@ -3,9 +3,9 @@ import { Enum } from 'enumify';
 class Role extends Enum {
   static validateRole(role) {
     const enumValue = Role.enumValueOf(role);
-    return (enumValue === Role.OPERATOR || enumValue === Role.ADMIN || enumValue === Role.MODEL);
+    return (enumValue === Role.ADMIN || enumValue === Role.MODEL || enumValue === Role.OPERATOR);
   }
 }
-Role.initEnum(['OPERATOR', 'ADMIN', 'MODEL']);
+Role.initEnum(['ADMIN', 'MODEL', 'OPERATOR']);
 
 export default Role;

@@ -6,8 +6,7 @@ import '../../../css/intervention.css';
 type State = {
   receiveTime: String,
   arrivalTime: String,
-  departureTime: String,
-  interventionStatus: String,
+  departureTime: String
 }
 
 class InterventionInfo extends Component<State> {
@@ -16,8 +15,7 @@ class InterventionInfo extends Component<State> {
     this.state = {
       receiveTime: '',
       arrivalTime: '',
-      departureTime: '',
-      interventionStatus: '',
+      departureTime: ''
     }
   }
 
@@ -38,10 +36,6 @@ class InterventionInfo extends Component<State> {
   };
 
   handleDepartureTimeChange = () => {
-    //
-  };
-
-  handleinterventionStatusChange = (e) => {
     //
   };
 
@@ -82,18 +76,6 @@ class InterventionInfo extends Component<State> {
                      required/>
               <label htmlFor="departureTime">
                 Departure time
-              </label>
-              <span className="helper-text"
-                    data-error="Required"/>
-            </div>
-
-            <div className="input-field">
-              <input id="interventionStatus"
-                     type="text"
-                     className="validate"
-                     required/>
-              <label htmlFor="interventionStatus">
-                Intervention status
               </label>
               <span className="helper-text"
                     data-error="Required"/>

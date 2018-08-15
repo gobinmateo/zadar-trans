@@ -3,6 +3,7 @@ import mongoose from 'mongoose';
 import socket from '../utils/socket.client';
 
 import Company from '../models/company.model';
+import InterventionStatus from '../utils/interventionStatus.enum';
 import Partner from '../models/partner.model';
 
 const InterventionSchema = new mongoose.Schema({
@@ -24,7 +25,12 @@ const InterventionSchema = new mongoose.Schema({
   insurancePolicyNumber: String,
   interventionCompletionDate: Date,
   interventionRecievalDate: Date,
-  interventionStatus: String,
+  interventionStatus: {
+    type: String,
+    required: true,
+    enum : [InterventionStatus.ASSIGNED.name, InterventionStatus.COMPLETED.name, InterventionStatus.RECEIVED.name],
+    default: InterventionStatus.RECEIVED.name
+  },
   partner: {
     type: mongoose.SchemaTypes.ObjectId, ref: 'Partner'
   },
@@ -65,6 +71,14 @@ InterventionSchema.pre('validate', function (next) {
       });
 });
 
+InterventionSchema.pre('save', function (next) {
+  if(this.partner) {
+    this.interventionStatus = InterventionStatus.ASSIGNED.name;
+  }
+
+  next();
+});
+
 InterventionSchema.post('save', function(intervention) {
   socket.emit('INTERVENTION_CREATED', intervention);
 });
@@ -82,7 +96,6 @@ InterventionSchema.methods.fillFromFormData = async function fillFromFormData(da
     insurancePolicyNumber,
     interventionCompletionDate,
     interventionRecievalDate,
-    interventionStatus,
     partner,
     paymentMethod,
     peopleCount,
@@ -102,7 +115,6 @@ InterventionSchema.methods.fillFromFormData = async function fillFromFormData(da
   if(insurancePolicyNumber) this.insurancePolicyNumber = insurancePolicyNumber;
   if(interventionCompletionDate) this.interventionCompletionDate = interventionCompletionDate;
   if(interventionRecievalDate) this.interventionRecievalDate = interventionRecievalDate;
-  if(interventionStatus) this.interventionStatus = interventionStatus;
   if(paymentMethod) this.paymentMethod = paymentMethod;
   if(peopleCount) this.peopleCount = peopleCount;
   if(phoneNumber) this.phoneNumber = phoneNumber;
@@ -127,6 +139,10 @@ InterventionSchema.methods.fillFromFormData = async function fillFromFormData(da
 
 InterventionSchema.statics.deleteOneById = (id) => {
   return Intervention.deleteOne({ _id: id });
+};
+
+InterventionSchema.statics.getOpenInterventions = () => {
+  return Intervention.find({ interventionStatus: { $in: [ InterventionStatus.ASSIGNED.name, InterventionStatus.RECEIVED.name ] } });
 };
 
 InterventionSchema.statics.findOneById = (id) => {

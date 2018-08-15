@@ -15,6 +15,7 @@ import authRoutes from './routes/auth';
 import companyRoutes from './routes/companies';
 import interventionRoutes from './routes/interventions';
 import partnerRoutes from './routes/partners';
+import searchRoutes from './routes/search';
 import userRoutes from './routes/users';
 
 import verifyToken from './authentication/verify.token.middleware';
@@ -66,6 +67,7 @@ app.use('/auth', authRoutes);
 app.use('/companies', companyRoutes);
 app.use('/interventions', interventionRoutes);
 app.use('/partners', partnerRoutes);
+app.use('/search', searchRoutes);
 app.use('/users', userRoutes);
 
 io.on('connection', socket => {
