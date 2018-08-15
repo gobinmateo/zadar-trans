@@ -1,3 +1,4 @@
+import moment from 'moment';
 import mongoose from 'mongoose';
 
 import Company from '../models/company.model';
@@ -15,7 +16,7 @@ const InterventionSchema = new mongoose.Schema({
   dischargeLocation: String,
   firstRegistrationDate: Date,
   _id: {
-    type: Number,
+    type: String,
     unique: true,
     required: true,
   },
@@ -43,8 +44,22 @@ InterventionSchema.pre('validate', function (next) {
       .findOne()
       .sort({ _id: -1})
       .exec((err, result) => {
-        if(!result) doc._id = 1;
-        else doc._id = result._id + 1;
+        //const year = moment().year();
+        const year = 2019
+
+        if(!result) {
+          doc._id = 'I.' + year + '.' + 1;
+        } else {
+          const idElems = result._id.split('.');
+          const interventionYear = parseInt(idElems[1]);
+          const count = parseInt(idElems[2]);
+
+          if(interventionYear !== year) {
+            doc._id = 'I.' + year + '.' + 1;
+          } else {
+            doc._id = 'I.' + year + '.' + (count + 1);
+          }
+        }
 
         next();
       });
