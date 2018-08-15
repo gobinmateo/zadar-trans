@@ -19,7 +19,7 @@
       },
       {
         "resource": "interventions/",
-        "methods": "*",
+        "methods": "GET",
         "action": "allow"
       },
       {
