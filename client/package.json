@@ -10,6 +10,7 @@
     "flow-bin": "^0.78.0",
     "formik": "^1.0.2",
     "jquery": "^3.3.1",
+    "js-cookie": "^2.2.0",
     "material-icons": "^0.2.3",
     "materialize-css": "^1.0.0-rc.2",
     "mobx": "^5.0.3",
