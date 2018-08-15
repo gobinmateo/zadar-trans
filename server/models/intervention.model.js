@@ -14,8 +14,8 @@ const InterventionSchema = new mongoose.Schema({
   },
   dischargeLocation: String,
   firstRegistrationDate: Date,
-  id: {
-    type: String,
+  _id: {
+    type: Number,
     unique: true,
     required: true,
   },
@@ -36,6 +36,20 @@ const InterventionSchema = new mongoose.Schema({
   victimName: String,
 });
 
+InterventionSchema.pre('validate', function (next) {
+  const doc = this;
+
+  this.model('Intervention')
+      .findOne()
+      .sort({ _id: -1})
+      .exec((err, result) => {
+        if(!result) doc._id = 1;
+        else doc._id = result._id + 1;
+
+        next();
+      });
+});
+
 InterventionSchema.methods.fillFromFormData = async function fillFromFormData(data) {
   const {
     accidentArrivalDate,
@@ -46,7 +60,6 @@ InterventionSchema.methods.fillFromFormData = async function fillFromFormData(da
     company,
     dischargeLocation,
     firstRegistrationDate,
-    id,
     insurancePolicyNumber,
     interventionCompletionDate,
     interventionRecievalDate,
@@ -67,7 +80,6 @@ InterventionSchema.methods.fillFromFormData = async function fillFromFormData(da
   if(checkoutRemark) this.checkoutRemark = checkoutRemark;
   if(dischargeLocation) this.dischargeLocation = dischargeLocation;
   if(firstRegistrationDate) this.firstRegistrationDate = firstRegistrationDate;
-  if(id) this.id = id;
   if(insurancePolicyNumber) this.insurancePolicyNumber = insurancePolicyNumber;
   if(interventionCompletionDate) this.interventionCompletionDate = interventionCompletionDate;
   if(interventionRecievalDate) this.interventionRecievalDate = interventionRecievalDate;
@@ -94,20 +106,12 @@ InterventionSchema.methods.fillFromFormData = async function fillFromFormData(da
   }
 };
 
-InterventionSchema.statics.checkIdInUse = (id) => {
-  return Intervention.find({ id }).limit(1).then(interventions => {
-    if (interventions[0]) {
-      return Promise.reject('Id already in use');
-    }
-  });
-};
-
 InterventionSchema.statics.deleteOneById = (id) => {
-  return Intervention.deleteOne({ id });
+  return Intervention.deleteOne({ _id: id });
 };
 
 InterventionSchema.statics.findOneById = (id) => {
-  return Intervention.findOne({ id });
+  return Intervention.findOne({ id_: id });
 };
 
 const Intervention = mongoose.model('Intervention', InterventionSchema);
