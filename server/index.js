@@ -39,6 +39,8 @@ app.use(bodyParser.json());
 app.use(express.json());
 app.use(cookieParser(process.env.SESSION_SECRET));
 
+
+// use express session with redis
 app.use(
   session({
     genid: (req) => {
@@ -55,11 +57,7 @@ app.use(
   })
 );
 
-app.use((req, res, next) => {
-  console.log('Session id', req.session.id);
-  next();
-});
-
+// verify if authentication token has been provided
 app.use(verifyToken);
 
 //app.use(acl.authorize.unless({ path: ['/auth/login', '/auth/logout'] }));
@@ -70,17 +68,11 @@ app.use('/interventions', interventionRoutes);
 app.use('/partners', partnerRoutes);
 app.use('/users', userRoutes);
 
-
-
 io.on('connection', socket => {
   console.log('user connected');
 
-  socket.on('SEND_INTERVENTION', (data) => {
-    console.log(data);
-    // io.emit sends to all clients
-    io.emit('RECEIVE_INTERVENTION', data);
-    // socket.broadcast.emit sends to all client expect the one sending the message
-    // socket.broadcast.emit('RECEIVE_INTERVETION', data);
+  socket.on('INTERVENTION_CREATED', (intervention) => {
+    socket.broadcast.emit('INTERVENTION_CREATED', intervention);
   });
 
   socket.on('INTERVENTION_NOTIFICATION', (newNotification) => {

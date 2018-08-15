@@ -1,5 +1,6 @@
 import moment from 'moment';
 import mongoose from 'mongoose';
+import socket from '../utils/socket.client';
 
 import Company from '../models/company.model';
 import Partner from '../models/partner.model';
@@ -44,8 +45,7 @@ InterventionSchema.pre('validate', function (next) {
       .findOne()
       .sort({ _id: -1})
       .exec((err, result) => {
-        //const year = moment().year();
-        const year = 2019
+        const year = moment().year();
 
         if(!result) {
           doc._id = 'I.' + year + '.' + 1;
@@ -55,7 +55,7 @@ InterventionSchema.pre('validate', function (next) {
           const count = parseInt(idElems[2]);
 
           if(interventionYear !== year) {
-            doc._id = 'I.' + year + '.' + 1;
+            doc._id = 'I.' + year + '.1';
           } else {
             doc._id = 'I.' + year + '.' + (count + 1);
           }
@@ -63,6 +63,10 @@ InterventionSchema.pre('validate', function (next) {
 
         next();
       });
+});
+
+InterventionSchema.post('save', function(intervention) {
+  socket.emit('INTERVENTION_CREATED', intervention);
 });
 
 InterventionSchema.methods.fillFromFormData = async function fillFromFormData(data) {
