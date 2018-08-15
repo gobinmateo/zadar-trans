@@ -7,7 +7,7 @@ const verifyUser = async (req, res, next) => {
   const user = await User.findOneByEmail(email);
 
   if(!user) {
-    res.status(400).json({ error: true, message: 'Invalid email' });
+    res.status(404).json({ error: true, message: 'Invalid email' });
   } else {
     const passwordFields = user.password.split('$');
 
