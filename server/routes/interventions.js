@@ -34,10 +34,6 @@ router.put('/:id', [
 ]);
 
 router.post('/', [
-  body('id', 'Id has to be provided').not().isEmpty(),
-  body('id', 'Id has to be under 30 characters long').isLength({ max: 30 }),
-  body('id').custom(Intervention.checkIdInUse),
-  verifyRequest,
   InterventionController.createNew
 ]);
 

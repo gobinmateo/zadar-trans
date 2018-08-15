@@ -4,7 +4,7 @@ const createNew = async (req, res, next) => {
   const newIntervention = new Intervention();
 
   await newIntervention.fillFromFormData(req.body);
-
+  console.log('new int ', newIntervention)
   await newIntervention.save();
 
   res.status(200).json({ error: false, message: 'Intervention created successfuly' });
