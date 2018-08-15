@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
 
 import Store from '../Store/Store';
-import { socket } from '../index';
+import socket from '../Socket';
 import API from '../Api';
 
 type State = {
@@ -10,27 +10,28 @@ type State = {
   interventions: Array
 }
 
-
 @inject('Store')
 @observer
 class InterventionList extends Component<State> {
 
   constructor(props) {
     super(props);
+
     this.state = {
       openInterventions: []
     };
   }
 
   componentDidMount() {
-    socket.on('RECEIVE_INTERVENTION', async (id) => {
-      console.log('NOVI ID ', id);
-      const interventions = await API.get('/interventions');
-      await this.setState({
-        openInterventions: [...this.state.openInterventions, ...[interventions.data]]
+    socket.on('INTERVENTION_CREATED', (intervention) => {
+      this.setState({
+        openInterventions: [...this.state.openInterventions, intervention]
       });
-      console.log(this.state.openInterventions[0]);
     });
+  }
+
+  componentWillUnmount() {
+    socket.removeListener('INTERVENTION_CREATED');
   }
 
   render() {
@@ -43,7 +44,7 @@ class InterventionList extends Component<State> {
                 <div className="card blue-grey darken-1">
                   <div className="card-content white-text">
                     <span className="card-title">{ intervention.id }</span>
-                    <p> { intervention.victimName } </p>
+                    <p> { intervention._id } </p>
                   </div>
                 </div>
               </div>

@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
 import axios from 'axios';
 import styled from 'styled-components';
+import Cookies from 'js-cookie';
+import API from '../Api';
 import { inject, observer } from 'mobx-react';
 import { withRouter } from 'react-router-dom';
 
@@ -34,27 +36,31 @@ class LoginPage extends Component<State> {
   };
 
   handleLogin = async (e) => {
-    const { history } = this.props;
     e.preventDefault();
+
+    const { history } = this.props;
     const { email, password} = this.state;
 
-    const connection = axios.create({
-      withCredentials: true,
-      baseURL: 'http://localhost:8080',
-    });
-
-    const response = await connection.post('/auth/login', {
-      data: {
+    try {
+      const response = await API.post('/auth/login', {
         email: email,
         password: password
-      },
-    });
+      });
 
-    this.props.Store.login(true);
+      if(response.status === 200) {
+        console.log('LOGIN SUCCESSFUL')
+        this.props.Store.login(true);
+        history.push('/');
 
-    if(response.data.token) document.cookie = `token=${ response.data.token }`;
-
-    history.push('/');
+        if(response.data.token) {
+          console.log('TOKEN ACQUIRED')
+          Cookies.set('token', response.data.token);
+          //document.cookie = `token=${ response.data.token }`;
+        }
+      }
+    } catch(error) {
+      alert(error.response.data.message);
+    }
   };
 
   render() {
@@ -76,7 +82,7 @@ class LoginPage extends Component<State> {
                   Email
                 </label>
                 <span className="helper-text"
-                      data-error="Invalid email"/>
+                      data-error="Invalid email format"/>
               </div>
 
               <div className="input-field">
@@ -92,7 +98,7 @@ class LoginPage extends Component<State> {
                   Password
                 </label>
                 <span className="helper-text"
-                      data-error="Invalid password"/>
+                      data-error="Password field is required"/>
               </div>
               <div className="input-field right">
                 <button className="btn blue-grey darken-3"

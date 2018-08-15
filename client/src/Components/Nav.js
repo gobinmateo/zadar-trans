@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { NavLink, withRouter } from 'react-router-dom';
-import { socket } from '../index';
+import socket from '../Socket';
 import { inject, observer } from 'mobx-react';
 import * as M from 'materialize-css';
 import styled from 'styled-components';

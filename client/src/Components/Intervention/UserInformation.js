@@ -3,7 +3,7 @@ import { inject, observer } from 'mobx-react';
 import { withRouter } from 'react-router-dom';
 import Dropdown from 'react-dropdown';
 
-import { socket } from '../../index';
+import socket from '../../Socket';
 import API from '../../Api';
 import 'react-dropdown/style.css'
 import Store from '../../Store/Store';
@@ -16,8 +16,6 @@ type State = {
   phoneNumber: String,
   insurancePolicyNumber: String
 }
-
-let id = 185;
 
 const partners = [
   'driver1', 'driver2', 'driver3'
@@ -76,23 +74,23 @@ class UserInformation extends Component<State> {
     const newIntervention = true;
 
     // add intervention to database
-    await API.post('/interventions', { id, victimName, phoneNumber, insurancePolicyNumber });
+    await API.post('/interventions', { victimName, phoneNumber, insurancePolicyNumber });
+
     // add intervention to global store
     Store.addIntervention(this.state);
+
     // send notification to other users
     socket.emit('INTERVENTION_NOTIFICATION', {
       newIntervention
     });
-    socket.emit('SEND_INTERVENTION', {
-      id
-    });
-    id += 1;
+
     // switch to front page
     history.push('/');
   };
 
   render() {
     const { model, partner, isLoading } = this.state;
+
     return (
       <div className="row">
         <div className="col s12 m8 l6 offset-l2 offset-m2 custom--margin">
