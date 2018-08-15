@@ -1,11 +1,14 @@
 import React, { Component } from 'react';
 import { NavLink, withRouter } from 'react-router-dom';
-import socket from '../Socket';
 import { inject, observer } from 'mobx-react';
+
+import API from '../../Api';
+import socket from '../../Socket';
 import * as M from 'materialize-css';
 import styled from 'styled-components';
 
-import Store from '../Store/Store';
+import Cookies from 'js-cookie';
+import Store from '../../Store/Store';
 
 const BtnCustom = styled.button`
   margin-right: 5%;
@@ -13,7 +16,7 @@ const BtnCustom = styled.button`
 
 @inject('Store')
 @observer
-class Nav extends Component {
+class Navbar extends Component {
 
   constructor(props) {
     super(props);
@@ -27,25 +30,47 @@ class Nav extends Component {
       this.setState({ newNotification });
     });
     document.addEventListener('DOMContentLoaded', function() {
-      const elems = document.querySelectorAll('.sidenav');
-      const options = {};
-      const instances = M.Sidenav.init(elems, options);
+      const sideNavElems = document.querySelectorAll('.sidenav');
+      const sideNavInstances = M.Sidenav.init(sideNavElems, {});
     });
   }
 
-  handleNewIntervention = () => {
+  handleNewInterventionClick = () => {
     const { history } = this.props;
+
     history.push('/intervention');
   };
 
   handleLogoClick = () => {
     const { history } = this.props;
+
     history.push('/');
+  };
+
+  handleLogoutClick = async () => {
+    const { history } = this.props;
+
+    try {
+      const response = await API.get('/auth/logout');
+
+      if(response.status === 200) {
+        this.props.Store.login(false);
+
+        Cookies.remove('token');
+
+        history.push('/login');
+      }
+    } catch(error) {
+      console.log(error);
+    }
   };
 
   render() {
     const { newNotification } = this.state;
     const { Store } = this.props;
+
+    const isUserLoggedIn = Cookies.get('token') !== undefined;
+
     return (
       <div>
         <nav className="nav-extended blue-grey darken-1">
@@ -57,23 +82,20 @@ class Nav extends Component {
             <a href="#" data-target="mobile-sidenav" className="sidenav-trigger">
               <i className="material-icons">menu</i>
             </a>
-            {Store.isLoggedIn &&
             <ul className="left hide-on-med-and-down">
-              <li><NavLink to='/'> <i className="material-icons">account_box</i> </NavLink></li>
               <li><NavLink to='/'> HOME </NavLink></li>
-            </ul>}
-            {!Store.isLoggedIn &&
-            <ul className="left hide-on-med-and-down">
-              <li><NavLink to='/login'> LOGIN </NavLink></li>
-              <li><NavLink to='/'> HOME </NavLink></li>
-            </ul>}
+              { isUserLoggedIn ?
+                <li><NavLink to='/login'><div onClick={this.handleLogoutClick}> LOGOUT </div></NavLink></li> :
+                <li><NavLink to='/login'> LOGIN </NavLink></li>
+              }
+            </ul>
             {newNotification &&
               <p> **NEW** </p>}
           </div>
           <div className="nav-content">
             <BtnCustom
               className="btn-floating pulse halfway-fab btn-large waves-effect waves-light blue-grey darken-3 right"
-              onClick={this.handleNewIntervention}>
+              onClick={this.handleNewInterventionClick}>
                 <i className="material-icons">add</i>
             </BtnCustom>
           </div>
@@ -87,4 +109,4 @@ class Nav extends Component {
   }
 }
 
-export default withRouter(Nav);
+export default withRouter(Navbar);

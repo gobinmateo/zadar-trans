@@ -1,10 +1,10 @@
 import React, { Component } from 'react';
-import axios from 'axios';
-import styled from 'styled-components';
-import Cookies from 'js-cookie';
-import API from '../Api';
-import { inject, observer } from 'mobx-react';
 import { withRouter } from 'react-router-dom';
+import { inject, observer } from 'mobx-react';
+
+import API from '../../Api';
+import Cookies from 'js-cookie';
+import styled from 'styled-components';
 
 const StyledDiv = styled.div`
   margin-top: 50px;
@@ -48,15 +48,11 @@ class LoginPage extends Component<State> {
       });
 
       if(response.status === 200) {
-        console.log('LOGIN SUCCESSFUL')
         this.props.Store.login(true);
-        history.push('/');
 
-        if(response.data.token) {
-          console.log('TOKEN ACQUIRED')
-          Cookies.set('token', response.data.token);
-          //document.cookie = `token=${ response.data.token }`;
-        }
+        Cookies.set('token', response.data.token);
+
+        history.push('/');
       }
     } catch(error) {
       alert(error.response.data.message);

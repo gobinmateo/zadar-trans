@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import * as M from 'materialize-css';
 
-import '../../css/intervention.css';
+import '../../../css/intervention.css';
 
 type State = {
   accidentLocation: String,

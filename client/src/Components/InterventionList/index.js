@@ -1,9 +1,9 @@
 import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
 
-import Store from '../Store/Store';
-import socket from '../Socket';
-import API from '../Api';
+import Store from '../../Store/Store';
+import socket from '../../Socket';
+import API from '../../Api';
 
 type State = {
   newIntervention: boolean,

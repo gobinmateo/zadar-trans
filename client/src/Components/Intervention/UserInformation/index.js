@@ -3,12 +3,12 @@ import { inject, observer } from 'mobx-react';
 import { withRouter } from 'react-router-dom';
 import Dropdown from 'react-dropdown';
 
-import socket from '../../Socket';
-import API from '../../Api';
+import socket from '../../../Socket';
+import API from '../../../Api';
 import 'react-dropdown/style.css'
-import Store from '../../Store/Store';
-import '../../css/intervention.css';
-import VehicleInformation from './VehicleInformation';
+import Store from '../../../Store/Store';
+import '../../../css/intervention.css';
+import VehicleInformation from '../VehicleInformation';
 
 type State = {
   name: String,

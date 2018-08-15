@@ -9,7 +9,7 @@ import AccidentInfo from './AccidentInfo';
 import Payment from './Payment';
 
 const Ul = styled.ul`
-  height: 100% !important; 
+  height: 100% !important;
   display: flex;
   flex-direction: column;
 `;

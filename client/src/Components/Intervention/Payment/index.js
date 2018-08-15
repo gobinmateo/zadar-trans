@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import Dropdown from 'react-dropdown';
 
-import '../../css/intervention.css';
+import '../../../css/intervention.css';
 
 const paymentOptions = [
   'cash', 'credit card'
