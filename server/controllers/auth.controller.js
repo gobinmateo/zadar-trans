@@ -6,7 +6,9 @@ const login = async (req, res, next) => {
 
   const token = jwt.sign(payload, process.env.JWT_SECRET);
 
-  res.json({ token });
+  req.session.role = role;
+
+  res.status(200).json({ token });
 };
 
 const logout = (req,res) => {

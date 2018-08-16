@@ -1,15 +1,5 @@
 [
   {
-    "group": "ADMIN",
-    "permissions": [
-      {
-        "resource": "*",
-        "methods": "*"
-      }
-    ],
-    "action": "allow"
-  },
-  {
     "group": "MODEL",
     "permissions": [
       {

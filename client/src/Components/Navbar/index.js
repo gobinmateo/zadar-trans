@@ -7,6 +7,7 @@ import socket from '../../Socket';
 import * as M from 'materialize-css';
 import styled from 'styled-components';
 
+import moment from 'moment';
 import Cookies from 'js-cookie';
 import Store from '../../Store/Store';
 
@@ -20,6 +21,7 @@ class Navbar extends Component {
 
   constructor(props) {
     super(props);
+
     this.state = {
       newNotification: false,
     }
@@ -29,16 +31,27 @@ class Navbar extends Component {
     socket.on('INTERVENTION_NOTIFICATION', (newNotification) => {
       this.setState({ newNotification });
     });
+
     document.addEventListener('DOMContentLoaded', function() {
       const sideNavElems = document.querySelectorAll('.sidenav');
       const sideNavInstances = M.Sidenav.init(sideNavElems, {});
     });
   }
 
-  handleNewInterventionClick = () => {
-    const { history } = this.props;
+  handleNewInterventionClick = async () => {
+    const { Store, history } = this.props;
 
-    history.push('/intervention');
+    try {
+      const response = await API.post('/interventions', { interventionRecievalDateTime: moment() });
+
+      if(response.status === 200) {
+        Store.addInterventionInfo(response.data);
+
+        history.push('/intervention');
+      }
+    } catch(error) {
+      alert(error.response.data.message);
+    }
   };
 
   handleLogoClick = () => {

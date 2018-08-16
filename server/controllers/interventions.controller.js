@@ -2,12 +2,12 @@ import Intervention from '../models/intervention.model';
 
 const createNew = async (req, res, next) => {
   const newIntervention = new Intervention();
-
+console.log(req.session.role)
   await newIntervention.fillFromFormData(req.body);
 
   await newIntervention.save();
 
-  res.status(200).json({ error: false, message: 'Intervention created successfuly' });
+  res.status(200).json(newIntervention);
 };
 
 const deleteAll = async (req, res, next) => {

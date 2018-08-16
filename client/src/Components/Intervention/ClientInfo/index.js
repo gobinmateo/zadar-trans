@@ -1,14 +1,10 @@
 import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
 import { withRouter } from 'react-router-dom';
-import Dropdown from 'react-dropdown';
 
-import socket from '../../../Socket';
-import API from '../../../Api';
 import 'react-dropdown/style.css'
 import Store from '../../../Store/Store';
 import '../../../css/intervention.css';
-import VehicleInformation from '../VehicleInformation';
 
 type State = {
   name: String,
@@ -17,27 +13,18 @@ type State = {
   insurancePolicyNumber: String
 }
 
-const partners = [
-  'driver1', 'driver2', 'driver3'
-];
-
-const models = [
-  'insurance1', 'insurance2', 'insurance3'
-];
-
 @inject('Store')
 @observer
 class UserInformation extends Component<State> {
 
   constructor(props) {
     super(props);
+
     this.state = {
       name: '',
       surname: '',
       phoneNumber: '',
-      insurancePolicyNumber: '',
-      partner: '',
-      model: '',
+      insurancePolicyNumber: ''
     };
   }
 
@@ -57,39 +44,8 @@ class UserInformation extends Component<State> {
     this.setState({ insurancePolicyNumber: e.target.value })
   };
 
-  handlePartnerChange = (event) => {
-    const { value } = event;
-    this.setState({ partner: value});
-  };
-
-  handleModelChange = (event) => {
-    const { value } = event;
-    this.setState({ model: value});
-  };
-
-  handleFinishClick = async () => {
-    const { Store, history } = this.props;
-    const { name, surname, phoneNumber, insurancePolicyNumber } = this.state;
-    const victimName = `${name} ${surname}`;
-    const newIntervention = true;
-
-    // add intervention to database
-    await API.post('/interventions', { victimName, phoneNumber, insurancePolicyNumber });
-
-    // add intervention to global store
-    Store.addIntervention(this.state);
-
-    // send notification to other users
-    socket.emit('INTERVENTION_NOTIFICATION', {
-      newIntervention
-    });
-
-    // switch to front page
-    history.push('/');
-  };
-
   render() {
-    const { model, partner, isLoading } = this.state;
+    const { isLoading } = this.state;
 
     return (
       <div className="row">
@@ -102,7 +58,7 @@ class UserInformation extends Component<State> {
                      onChange={this.handleNameChange}
                      required/>
               <label htmlFor="name">
-                Name
+                Ime
               </label>
               <span className="helper-text"
                     data-error="Required"/>
@@ -115,7 +71,7 @@ class UserInformation extends Component<State> {
                      onChange={this.handleSurnameChange}
                      required/>
               <label htmlFor="surname">
-                Surname
+                Prezime
               </label>
               <span className="helper-text"
                     data-error="Required"/>
@@ -128,7 +84,7 @@ class UserInformation extends Component<State> {
                      onChange={this.handlePhoneNumberChange}
                      required/>
               <label htmlFor="phoneNumber">
-                Phone number
+                Broj mobitela
               </label>
               <span className="helper-text"
                     data-error="Required"/>
@@ -136,22 +92,15 @@ class UserInformation extends Component<State> {
 
             <div className="input-field">
               <input id="insurancePolicyNumber"
-                     type="text"
+                     type="number"
                      className="validate"
                      onChange={this.handleInsurancePolicyNumberChange}
                      required/>
               <label htmlFor="insurancePolicyNumber">
-                Insurance policy number
+                Broj police osiguranja
               </label>
               <span className="helper-text"
                     data-error="Required"/>
-            </div>
-
-            <Dropdown onChange={this.handlePartnerChange} value={partner} options={partners} placeholder="Select an option"/>
-            <Dropdown onChange={this.handleModelChange} value={model} options={models} placeholder="Select an option"/>
-
-            <div className="input-field right">
-              <a onClick={this.handleFinishClick} className="btn blue-grey darken-3">Finish</a>
             </div>
           </form>
         </div>

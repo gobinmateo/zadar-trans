@@ -20,6 +20,7 @@ type State = {
 class LoginPage extends Component<State> {
   constructor(props) {
     super(props);
+
     this.state = {
       email: '',
       password: '',
@@ -48,8 +49,6 @@ class LoginPage extends Component<State> {
       });
 
       if(response.status === 200) {
-        this.props.Store.login(true);
-
         Cookies.set('token', response.data.token);
 
         history.push('/');

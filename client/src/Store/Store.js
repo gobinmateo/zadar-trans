@@ -6,10 +6,15 @@ class Store {
   @observable isLoggedIn = false;
 
   @action
-  addIntervention(info) {
+  addInterventionInfo(info) {
     for (const prop in info) {
       this.intervention[prop] = info[prop];
     }
+  }
+
+  @action
+  clearIntervention() {
+    this.intervention = {};
   }
 
   @action

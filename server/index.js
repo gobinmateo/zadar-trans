@@ -9,7 +9,6 @@ import http from 'http';
 import mongoose from 'mongoose';
 import session from 'express-session';
 import socketIO from 'socket.io';
-import uuid from 'uuid/v4';
 
 import authRoutes from './routes/auth';
 import companyRoutes from './routes/companies';
@@ -44,8 +43,8 @@ app.use(cookieParser(process.env.SESSION_SECRET));
 // use express session with redis
 app.use(
   session({
-    genid: (req) => {
-      return uuid();
+    cookie: {
+      maxAge: parseInt(process.env.COOKIE_MAX_AGE)
     },
     resave: false,
     saveUninitialized: false,
@@ -54,7 +53,8 @@ app.use(
       port: process.env.REDIS_PORT,
       host: process.env.REDIS_HOST,
       password: process.env.REDIS_PASSWORD
-    })
+    }),
+    unset: 'destroy'
   })
 );
 

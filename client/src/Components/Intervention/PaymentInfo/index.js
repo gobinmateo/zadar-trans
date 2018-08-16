@@ -1,6 +1,9 @@
 import React, { Component } from 'react';
 import Dropdown from 'react-dropdown';
 
+import socket from '../../../Socket';
+import API from '../../../Api';
+
 import '../../../css/intervention.css';
 
 const paymentOptions = [
@@ -31,12 +34,35 @@ class Payment extends Component<State> {
     this.setState({ signOutNote: e.target.value });
   };
 
+  handleFinishClick = async () => {
+    const { Store, history } = this.props;
+    const { name, surname, phoneNumber, insurancePolicyNumber } = this.state;
+    const victimName = `${name} ${surname}`;
+    const newIntervention = true;
+    console.log(Store.intervention)
+    // add intervention to database
+   // await API.post('/interventions', { victimName, phoneNumber, insurancePolicyNumber });
+
+    // add intervention to global store
+    Store.addIntervention(this.state);
+
+    // send notification to other users
+    socket.emit('INTERVENTION_NOTIFICATION', {
+      newIntervention
+    });
+
+    // switch to front page
+    history.push('/');
+  };
+
   render() {
     const { paymentType } = this.state;
     return (
       <div className="row">
         <div className="col s12 m8 l6 offset-l2 offset-m2 custom--margin">
+
           <form action="">
+
             <Dropdown onChange={this.handlePartnerChange} value={paymentType} options={paymentOptions} placeholder="Select an option"/>
 
             <div className="input-field">
@@ -64,19 +90,26 @@ class Payment extends Component<State> {
               <span className="helper-text"
                     data-error="Required"/>
             </div>
+
+            <div className="input-field right">
+              <a onClick={this.handleFinishClick} className="btn blue-grey darken-3">Spremi</a>
+            </div>
           </form>
 
           <div className="preloader-wrapper big active">
             <div className="spinner-layer spinner-blue-only">
               <div className="circle-clipper left">
                 <div className="circle"></div>
-              </div><div className="gap-patch">
-              <div className="circle"></div>
-            </div><div className="circle-clipper right">
-              <div className="circle"></div>
-            </div>
+              </div>
+              <div className="gap-patch">
+                <div className="circle"></div>
+              </div>
+              <div className="circle-clipper right">
+                <div className="circle"></div>
+              </div>
             </div>
           </div>
+
         </div>
       </div>
     )

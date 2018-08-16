@@ -6,8 +6,9 @@ import Company from '../models/company.model';
 import InterventionStatus from '../utils/interventionStatus.enum';
 import Partner from '../models/partner.model';
 
+import formatId from '../utils/interventionIdFormatter';
+
 const InterventionSchema = new mongoose.Schema({
-  accidentArrivalDate: Date,
   accidentLocation: String,
   additionalVechileInfo: String,
   chassisNumber: String,
@@ -23,8 +24,9 @@ const InterventionSchema = new mongoose.Schema({
     required: true,
   },
   insurancePolicyNumber: String,
-  interventionCompletionDate: Date,
-  interventionRecievalDate: Date,
+  interventionArrivalDateTime: Date,
+  interventionCompletionDateTime: Date,
+  interventionRecievalDateTime: Date,
   interventionStatus: {
     type: String,
     required: true,
@@ -54,16 +56,16 @@ InterventionSchema.pre('validate', function (next) {
         const year = moment().year();
 
         if(!result) {
-          doc._id = 'I.' + year + '.' + 1;
+          doc._id = 'I.' + year + '.' + formatId(1);
         } else {
           const idElems = result._id.split('.');
           const interventionYear = parseInt(idElems[1]);
           const count = parseInt(idElems[2]);
 
           if(interventionYear !== year) {
-            doc._id = 'I.' + year + '.1';
+            doc._id = 'I.' + year + '.' + formatId(1);
           } else {
-            doc._id = 'I.' + year + '.' + (count + 1);
+            doc._id = 'I.' + year + '.' + formatId(count + 1);
           }
         }
 
@@ -85,7 +87,7 @@ InterventionSchema.post('save', function(intervention) {
 
 InterventionSchema.methods.fillFromFormData = async function fillFromFormData(data) {
   const {
-    accidentArrivalDate,
+    interventionArrivalDateTime,
     accidentLocation,
     additionalVehicleInfo,
     chassisNumber,
@@ -94,8 +96,8 @@ InterventionSchema.methods.fillFromFormData = async function fillFromFormData(da
     dischargeLocation,
     firstRegistrationDate,
     insurancePolicyNumber,
-    interventionCompletionDate,
-    interventionRecievalDate,
+    interventionCompletionDateTime,
+    interventionRecievalDateTime,
     partner,
     paymentMethod,
     peopleCount,
@@ -106,15 +108,15 @@ InterventionSchema.methods.fillFromFormData = async function fillFromFormData(da
     victimName
   } = data;
 
-  if(accidentArrivalDate) this.accidentArrivalDate = accidentArrivalDate;
+  if(interventionArrivalDateTime) this.interventionArrivalDateTime = interventionArrivalDateTime;
   if(additionalVehicleInfo) this.additionalVehicleInfo = additionalVehicleInfo;
   if(chassisNumber) this.chassisNumber = chassisNumber;
   if(checkoutRemark) this.checkoutRemark = checkoutRemark;
   if(dischargeLocation) this.dischargeLocation = dischargeLocation;
   if(firstRegistrationDate) this.firstRegistrationDate = firstRegistrationDate;
   if(insurancePolicyNumber) this.insurancePolicyNumber = insurancePolicyNumber;
-  if(interventionCompletionDate) this.interventionCompletionDate = interventionCompletionDate;
-  if(interventionRecievalDate) this.interventionRecievalDate = interventionRecievalDate;
+  if(interventionCompletionDateTime) this.interventionCompletionDateTime = interventionCompletionDateTime;
+  if(interventionRecievalDateTime) this.interventionRecievalDateTime = interventionRecievalDateTime;
   if(paymentMethod) this.paymentMethod = paymentMethod;
   if(peopleCount) this.peopleCount = peopleCount;
   if(phoneNumber) this.phoneNumber = phoneNumber;

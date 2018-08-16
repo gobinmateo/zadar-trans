@@ -15,7 +15,7 @@ const UserSchema = new mongoose.Schema({
   role: {
     type: String,
     required: true,
-    enum : [Role.OPERATOR.name, Role.ADMIN.name, Role.MODEL.name],
+    enum : [ Role.MODEL.name, Role.OPERATOR.name ],
     default: Role.OPERATOR.name
   },
 });
@@ -46,7 +46,7 @@ UserSchema.statics.findOneByEmail = async(email) => {
 };
 
 UserSchema.statics.getHashedPassword = (password, salt) => {
-  const hash = crypto.createHmac('sha512',salt)
+  const hash = crypto.createHmac(process.env.HASH_ALGORITHM,salt)
                        .update(password)
                        .digest("base64");
 

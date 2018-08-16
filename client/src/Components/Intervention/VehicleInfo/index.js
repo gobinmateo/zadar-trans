@@ -11,7 +11,7 @@ type State = {
   carManufacturer: String,
 }
 
-class VehicleInformation extends Component<State> {
+class VehicleInfo extends Component<State> {
   constructor(props) {
     super(props);
     this.state = {
@@ -63,7 +63,7 @@ class VehicleInformation extends Component<State> {
                      onChange={this.handleSessionNumberChange}
                      required/>
               <label htmlFor="sessionNumber">
-                Session number
+                Broj šasije
               </label>
               <span className="helper-text"
                     data-error="Required"/>
@@ -76,7 +76,7 @@ class VehicleInformation extends Component<State> {
                      onChange={this.handleRegistrationPlateChange}
                      required/>
               <label htmlFor="registrationPlate">
-                Registration plate
+                Registracija
               </label>
               <span className="helper-text"
                     data-error="Required"/>
@@ -89,7 +89,7 @@ class VehicleInformation extends Component<State> {
                      onChange={this.handleCarModelChange}
                      required/>
               <label htmlFor="carModel">
-                Car model
+                Model vozila
               </label>
               <span className="helper-text"
                     data-error="Required"/>
@@ -102,7 +102,7 @@ class VehicleInformation extends Component<State> {
                      onChange={this.handleCarManufacturerChange}
                      required/>
               <label htmlFor="carManufacturer">
-                Car manufacturer
+                Marka vozila
               </label>
               <span className="helper-text"
                     data-error="Required"/>
@@ -114,7 +114,7 @@ class VehicleInformation extends Component<State> {
                      id="firstRegistrationDate"
                      required/>
                 <label htmlFor="firstRegistrationDate">
-                First registration date
+                  Datum prve registracije
                 </label>
                 <span className="helper-text"
                     data-error="Required"/>
@@ -126,4 +126,4 @@ class VehicleInformation extends Component<State> {
   }
 };
 
-export default VehicleInformation;
+export default VehicleInfo;

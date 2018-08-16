@@ -13,6 +13,7 @@ type State = {
 class AccidentInfo extends Component<State> {
   constructor(props) {
     super(props);
+
     this.state = {
       accidentLocation: '',
       unloadingLocation: '',
@@ -53,7 +54,7 @@ class AccidentInfo extends Component<State> {
                      onChange={this.handleAccidentLocationChange}
                      required/>
               <label htmlFor="sessionNumber">
-                Accident location
+                Lokacija nesreće
               </label>
               <span className="helper-text"
                     data-error="Required"/>
@@ -66,33 +67,33 @@ class AccidentInfo extends Component<State> {
                      onChange={this.handleUnloadingLocationChange}
                      required/>
               <label htmlFor="registrationPlate">
-                Unloading location
+                Lokacija istovara
               </label>
               <span className="helper-text"
                     data-error="Required"/>
             </div>
 
-            <div className="input-field">
+            <div  className="input-field">
               <input id="carStatus"
                      type="text"
                      className="validate"
                      onChange={this.handleCarStatusChange}
                      required/>
               <label htmlFor="carStatus">
-                Car status
+                Status vozila
               </label>
               <span className="helper-text"
                     data-error="Required"/>
             </div>
 
-            <div className="input-field">
+            <div  className="input-field">
               <textarea id="carManufacturer"
-                     className="materialize-textarea validate"
-                     onChange={this.handleCarStatusDescChange}
-                     required>
+                        className="materialize-textarea validate"
+                        onChange={this.handleCarStatusDescChange}
+                        required>
               </textarea>
               <label htmlFor="carManufacturer">
-                Car status description
+                Opis nesreće
               </label>
               <span className="helper-text"
                     data-error="Required"/>
