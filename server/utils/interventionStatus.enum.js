@@ -4,9 +4,9 @@ class InterventionStatus extends Enum {
   static validateInterventionStatus(interventionStatus) {
     const enumValue = InterventionStatus.enumValueOf(interventionStatus);
 
-    return (enumValue === InterventionStatus.ASSIGNED || enumValue === InterventionStatus.COMPLETED || enumValue === InterventionStatus.RECEIVED);
+    return (enumValue === InterventionStatus.DODIJELJENA || enumValue === InterventionStatus.OBAVLJENA || enumValue === InterventionStatus.ZAPRIMLJENA);
   }
 }
-InterventionStatus.initEnum(['ASSIGNED', 'COMPLETED', 'RECEIVED']);
+InterventionStatus.initEnum(['DODIJELJENA', 'OBAVLJENA', 'ZAPRIMLJENA']);
 
 export default InterventionStatus;

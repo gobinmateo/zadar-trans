@@ -8,6 +8,8 @@ import InterventionInfo from '../../Components/Intervention/InterventionInfo';
 import AccidentInfo from '../../Components/Intervention/AccidentInfo';
 import PaymentInfo from '../../Components/Intervention/PaymentInfo';
 
+import API from '../../Api';
+
 import styled from 'styled-components';
 
 const Ul = styled.ul`
@@ -22,16 +24,53 @@ class InterventionPage extends Component {
 
   constructor(props) {
     super(props);
+
+    this.Store = this.props.Store;
+
+    this.state = {
+      _id: this.props.match.params.id
+    };
   }
 
-  componentDidMount() {
+  loadInterventionData(source) {
+    console.log('source ', source)
+    this.setState({
+      accidentLocation: source.accidentLocation,
+      additionalVehicleInfo: source.additionalVehicleInfo,
+      chassisNumber: source.chassisNumber,
+      checkoutRemark: source.checkoutRemark,
+      company: source.company,
+      dischargeLocation: source.dischargeLocation,
+      firstRegistrationDate: source.firstRegistrationDate,
+      insurancePolicyNumber: source.insurancePolicyNumber,
+      interventionArrivalDateTime: source.interventionArrivalDateTime,
+      interventionCompletionDateTime: source.interventionCompletionDateTime,
+      interventionRecievalDateTime: source.interventionRecievalDateTime,
+      interventionStatus: source.interventionStatus,
+      partner: source.partner,
+      paymentMethod: source.paymentMethod,
+      peopleCount: source.peopleCount,
+      phoneNumber: source.phoneNumber,
+      registrationPlate: source.registrationPlate,
+      remark: source.remark,
+      vehicleModel: source.vehicleModel,
+      vehicleStatus: source.vehicleStatus,
+      victimName: source.victimName
+    });
+  }
+
+  async componentDidMount() {
     const elem = document.querySelector('.tabs');
     const options = {}
     const instance = M.Tabs.init(elem, options);
+
+    const response = await API.get(`/interventions/${this.state._id}`);
+
+    this.loadInterventionData(response.data);
   }
 
   render() {
-    const { _id } = this.props.Store.intervention;
+    const { _id } = this.state;
 
     return (
       <div className="row">
@@ -62,11 +101,27 @@ class InterventionPage extends Component {
             </Ul>
           </div>
           <div className="col s9 m8 l10 offset-s1">
-            <div id="test1" className="tab-content"><InterventionInfo /></div>
-            <div id="test2" className="tab-content"><ClientInfo /></div>
-            <div id="test3" className="tab-content"><VehicleInfo /></div>
-            <div id="test4" className="tab-content"><AccidentInfo /></div>
-            <div id="test5" className="col s12"><PaymentInfo /></div>
+            <div id="test1" className="tab-content">
+              <InterventionInfo
+                interventionRecievalDateTime={this.state.interventionRecievalDateTime}
+                interventionArrivalDateTime={this.state.interventionArrivalDateTime}
+                interventionCompletionDateTime={this.state.interventionCompletionDateTime}
+                interventionStatus={this.state.interventionStatus}
+                partner={this.state.partner}
+                model={this.state.model}/>
+            </div>
+            <div id="test2" className="tab-content">
+              <ClientInfo />
+            </div>
+            <div id="test3" className="tab-content">
+              <VehicleInfo />
+            </div>
+            <div id="test4" className="tab-content">
+              <AccidentInfo />
+            </div>
+            <div id="test5" className="col s12">
+              <PaymentInfo />
+            </div>
           </div>
         </div>
       </div>

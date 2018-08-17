@@ -30,8 +30,8 @@ const InterventionSchema = new mongoose.Schema({
   interventionStatus: {
     type: String,
     required: true,
-    enum : [InterventionStatus.ASSIGNED.name, InterventionStatus.COMPLETED.name, InterventionStatus.RECEIVED.name],
-    default: InterventionStatus.RECEIVED.name
+    enum : [InterventionStatus.DODIJELJENA.name, InterventionStatus.OBAVLJENA.name, InterventionStatus.ZAPRIMLJENA.name],
+    default: InterventionStatus.ZAPRIMLJENA.name
   },
   partner: {
     type: mongoose.SchemaTypes.ObjectId, ref: 'Partner'
@@ -75,7 +75,7 @@ InterventionSchema.pre('validate', function (next) {
 
 InterventionSchema.pre('save', function (next) {
   if(this.partner) {
-    this.interventionStatus = InterventionStatus.ASSIGNED.name;
+    this.interventionStatus = InterventionStatus.DODIJELJENA.name;
   }
 
   next();
@@ -87,7 +87,6 @@ InterventionSchema.post('save', function(intervention) {
 
 InterventionSchema.methods.fillFromFormData = async function fillFromFormData(data) {
   const {
-    interventionArrivalDateTime,
     accidentLocation,
     additionalVehicleInfo,
     chassisNumber,
@@ -96,6 +95,7 @@ InterventionSchema.methods.fillFromFormData = async function fillFromFormData(da
     dischargeLocation,
     firstRegistrationDate,
     insurancePolicyNumber,
+    interventionArrivalDateTime,
     interventionCompletionDateTime,
     interventionRecievalDateTime,
     partner,
@@ -108,13 +108,13 @@ InterventionSchema.methods.fillFromFormData = async function fillFromFormData(da
     victimName
   } = data;
 
-  if(interventionArrivalDateTime) this.interventionArrivalDateTime = interventionArrivalDateTime;
   if(additionalVehicleInfo) this.additionalVehicleInfo = additionalVehicleInfo;
   if(chassisNumber) this.chassisNumber = chassisNumber;
   if(checkoutRemark) this.checkoutRemark = checkoutRemark;
   if(dischargeLocation) this.dischargeLocation = dischargeLocation;
   if(firstRegistrationDate) this.firstRegistrationDate = firstRegistrationDate;
   if(insurancePolicyNumber) this.insurancePolicyNumber = insurancePolicyNumber;
+  if(interventionArrivalDateTime) this.interventionArrivalDateTime = interventionArrivalDateTime;
   if(interventionCompletionDateTime) this.interventionCompletionDateTime = interventionCompletionDateTime;
   if(interventionRecievalDateTime) this.interventionRecievalDateTime = interventionRecievalDateTime;
   if(paymentMethod) this.paymentMethod = paymentMethod;
@@ -148,7 +148,7 @@ InterventionSchema.statics.getOpenInterventions = () => {
 };
 
 InterventionSchema.statics.findOneById = (id) => {
-  return Intervention.findOne({ id_: id });
+  return Intervention.findOne({ _id: id });
 };
 
 const Intervention = mongoose.model('Intervention', InterventionSchema);

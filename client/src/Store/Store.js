@@ -14,12 +14,21 @@ class Store {
 
   @action
   clearIntervention() {
-    this.intervention = {};
+    this.intervention = new InterventionStorage();
   }
 
   @action
   login() {
     this.isLoggedIn = true;
+  }
+
+  @action
+  isInterventionBlank() {
+    for (const key in Object.keys(this.intervention)) {
+      if(this.intervention[key] !== undefined && this.intervention[key] !== '') return false;
+    }
+
+    return true;
   }
 }
 

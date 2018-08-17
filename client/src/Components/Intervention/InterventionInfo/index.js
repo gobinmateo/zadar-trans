@@ -23,17 +23,14 @@ const interventionStatuses = [
 ];
 
 class InterventionInfo extends Component<State> {
-  constructor(props) {
-    super(props);
 
-    this.state = {
-      receiveTime: '',
-      arrivalTime: '',
-      departureTime: '',
-      partner: '',
-      model: '',
-      interventionStatus: ''
-    }
+  data = {
+    model: this.props.model,
+    partner: this.props.partner,
+    interventionStatus: this.props.interventionStatus,
+    interventionRecievalDateTime: this.props.interventionRecievalDateTime,
+    interventionArrivalDateTime: this.props.interventionArrivalDateTime,
+    interventionCompletionDateTime: this.props.interventionCompletionDateTime
   }
 
   componentDidMount() {
@@ -76,7 +73,8 @@ class InterventionInfo extends Component<State> {
   };
 
   render() {
-    const { model, partner, interventionStatus } = this.state;
+    console.log('DATA ', this.data)
+    //const { model, partner, interventionStatus } = this.state;
 
     return (
       <div className="row">
@@ -85,11 +83,12 @@ class InterventionInfo extends Component<State> {
           <form action="">
 
             <div className="input-field">
-              <input id="receiveTime"
+              <input id="interventionRecievalDateTime"
                      type="text"
                      className="timepicker"
-                     required/>
-              <label htmlFor="receiveTime">
+                     required
+                     value={this.data.interventionRecievalDateTime}/>
+              <label htmlFor="interventionRecievalDateTime">
                 Vrijeme zaprimanja
               </label>
               <span className="helper-text"
@@ -97,11 +96,12 @@ class InterventionInfo extends Component<State> {
             </div>
 
             <div className="input-field">
-              <input id="arrivalTime"
+              <input id="interventionArrivalDateTime"
                      type="text"
                      className="timepicker"
-                     required/>
-              <label htmlFor="arrivalTime">
+                     required
+                     value={this.data.interventionArrivalDateTime}/>
+              <label htmlFor="interventionArrivalDateTime">
                 Vrijeme dolaska na lokaciju
               </label>
               <span className="helper-text"
@@ -109,31 +109,30 @@ class InterventionInfo extends Component<State> {
             </div>
 
             <div className="input-field">
-              <input id="departureTime"
+              <input id="interventionCompletionDateTime"
                      type="text"
                      className="timepicker validate"
-                     required/>
-              <label htmlFor="departureTime">
+                     required
+                     value={this.data.interventionCompletionDateTime}/>
+              <label htmlFor="interventionCompletionDateTime">
                 Vrijeme završetka usluge
               </label>
               <span className="helper-text"
                     data-error="Required"/>
             </div>
             <Dropdown
-              onChange={this.handleInterventionStatusChange}
-              value={interventionStatus}
+              value={this.data.interventionStatus}
               options={interventionStatuses}
               placeholder="Status intervencije"/>
             <Dropdown
               onChange={this.handlePartnerChange}
-              value={partner}
               options={partners}
-              placeholder="Partner"/>
+              placeholder="Partner"
+              value={this.data.partner}/>
             <Dropdown
-              onChange={this.handleModelChange}
-                value={model}
                 options={models}
-                placeholder="Model"/>
+                placeholder="Model"
+                value={this.data.model}/>
           </form>
         </div>
       </div>

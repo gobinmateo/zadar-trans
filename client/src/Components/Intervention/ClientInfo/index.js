@@ -46,6 +46,12 @@ class UserInformation extends Component<State> {
 
   render() {
     const { isLoading } = this.state;
+    const { victimName } = this.props;
+
+    let nameElems;
+    if(victimName) {
+      nameElems = victimName.split(' ');
+    }
 
     return (
       <div className="row">

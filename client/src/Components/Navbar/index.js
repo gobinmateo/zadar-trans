@@ -47,7 +47,7 @@ class Navbar extends Component {
       if(response.status === 200) {
         Store.addInterventionInfo(response.data);
 
-        history.push('/intervention');
+        history.push(`/intervention/${response.data._id}`);
       }
     } catch(error) {
       alert(error.response.data.message);
