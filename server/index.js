@@ -39,7 +39,8 @@ io.on('connection', socket => {
   socket.on('SEND_INTERVENTION', (data) => {
     console.log(data);
     // io.emit sends to all clients
-    io.emit('RECEIVE_INTERVENTION', data);
+    // io.emit('RECEIVE_INTERVENTION', data);
+    socket.broadcast.emit('RECEIVE_INTERVENTION', data);
     // socket.broadcast.emit sends to all client expect the one sending the message
     // socket.broadcast.emit('RECEIVE_INTERVETION', data);
   });

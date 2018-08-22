@@ -31,7 +31,7 @@ router.get('/:id', async (req, res, next) => {
   if(id === undefined) res.send({ error: 'Id has to be provided!' });
 
   const intervention = await Intervention.findOne({ id });
-
+  console.log(intervention);
   if(!intervention) {
     res.status(403).send({ error: 'Intervention with provided id does not exist!' });
   } else {
@@ -105,6 +105,7 @@ router.put('/', async (req, res, next) => {
 });
 
 router.post('/', async (req, res, next) => {
+  console.log(' U POSTU');
   const {
     accidentArrivalDate,
     accidentLocation,
@@ -169,7 +170,8 @@ router.post('/', async (req, res, next) => {
 
     console.log('NEW INTERVENTION ', newIntervention);
     await newIntervention.save();
-    res.status(200).send({ message: 'Intervention successfully added to database.' });
+    res.json({ id: newIntervention.id });
+    // res.status(200).send({ message: 'Intervention successfully added to database.' });
   }
 });
 

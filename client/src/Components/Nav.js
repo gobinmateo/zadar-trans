@@ -6,6 +6,7 @@ import * as M from 'materialize-css';
 import styled from 'styled-components';
 
 import Store from '../Store/Store';
+import ProfileDropdown from './util/ProfileDropdown';
 
 const BtnCustom = styled.button`
   margin-right: 5%;
@@ -29,7 +30,7 @@ class Nav extends Component {
     document.addEventListener('DOMContentLoaded', function() {
       const elems = document.querySelectorAll('.sidenav');
       const options = {};
-      const instances = M.Sidenav.init(elems, options);
+      M.Sidenav.init(elems, options);
     });
   }
 
@@ -59,7 +60,9 @@ class Nav extends Component {
             </a>
             {Store.isLoggedIn &&
             <ul className="left hide-on-med-and-down">
-              <li><NavLink to='/'> <i className="material-icons">account_box</i> </NavLink></li>
+              <li>
+                <ProfileDropdown />
+              </li>
               <li><NavLink to='/'> HOME </NavLink></li>
             </ul>}
             {!Store.isLoggedIn &&

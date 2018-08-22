@@ -17,7 +17,7 @@ type State = {
   insurancePolicyNumber: String
 }
 
-let id = 185;
+let id = 290;
 
 const partners = [
   'driver1', 'driver2', 'driver3'
@@ -74,9 +74,9 @@ class UserInformation extends Component<State> {
     const { name, surname, phoneNumber, insurancePolicyNumber } = this.state;
     const victimName = `${name} ${surname}`;
     const newIntervention = true;
-
+    console.log('FINISH CLICK');
     // add intervention to database
-    await API.post('/interventions', { id, victimName, phoneNumber, insurancePolicyNumber });
+    const result = await API.post('/interventions', { id, victimName, phoneNumber, insurancePolicyNumber });
     // add intervention to global store
     Store.addIntervention(this.state);
     // send notification to other users
@@ -84,7 +84,7 @@ class UserInformation extends Component<State> {
       newIntervention
     });
     socket.emit('SEND_INTERVENTION', {
-      id
+      id: result.data.id
     });
     id += 1;
     // switch to front page
