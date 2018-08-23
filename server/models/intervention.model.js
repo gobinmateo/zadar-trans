@@ -144,7 +144,7 @@ InterventionSchema.statics.deleteOneById = (id) => {
 };
 
 InterventionSchema.statics.getOpenInterventions = () => {
-  return Intervention.find({ interventionStatus: { $in: [ InterventionStatus.ASSIGNED.name, InterventionStatus.RECEIVED.name ] } });
+  return Intervention.find({ interventionStatus: { $in: [ InterventionStatus.DODIJELJENA.name, InterventionStatus.ZAPRIMLJENA.name ] } });
 };
 
 InterventionSchema.statics.findOneById = (id) => {

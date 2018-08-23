@@ -2,7 +2,7 @@ import Intervention from '../models/intervention.model';
 
 const createNew = async (req, res, next) => {
   const newIntervention = new Intervention();
-console.log(req.session.role)
+
   await newIntervention.fillFromFormData(req.body);
 
   await newIntervention.save();

@@ -49,12 +49,12 @@ class LoginPage extends Component<State> {
       });
 
       if(response.status === 200) {
-        Cookies.set('token', response.data.token);
+        Cookies.set('token', response.token);
 
         history.push('/');
       }
     } catch(error) {
-      alert(error.response.data.message);
+      alert(error.response.message);
     }
   };
 

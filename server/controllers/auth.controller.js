@@ -4,6 +4,8 @@ const login = async (req, res, next) => {
   const { email, password, role } = req.body;
   const payload = { role }
 
+  console.log(req.body)
+
   const token = jwt.sign(payload, process.env.JWT_SECRET);
 
   req.session.role = role;

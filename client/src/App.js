@@ -14,7 +14,7 @@ class App extends Component {
         <Switch>
           <Route exact path='/' component={ RequireLogin(HomePage) }/>
           <Route path='/login' component={ LoginPage }/>
-          <Route path='/intervention/:id' component={ InterventionPage }/>
+          <Route path='/intervention/:id' component={ RequireLogin(InterventionPage) }/>
         </Switch>
       </div>
     );
